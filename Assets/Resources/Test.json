@@ -1,0 +1,88 @@
+{
+    "songId": "Test",
+    "version": 1,
+    "bpm": 165.0,
+    "snapOffsetMs": 130,
+    "events": [
+        {
+            "timeMs": 3770,
+            "action": 0
+        },
+        {
+            "timeMs": 4862,
+            "action": 3
+        },
+        {
+            "timeMs": 5226,
+            "action": 0
+        },
+        {
+            "timeMs": 6318,
+            "action": 3
+        },
+        {
+            "timeMs": 9594,
+            "action": 0
+        },
+        {
+            "timeMs": 10140,
+            "action": 3
+        },
+        {
+            "timeMs": 10686,
+            "action": 3
+        },
+        {
+            "timeMs": 11232,
+            "action": 0
+        },
+        {
+            "timeMs": 11596,
+            "action": 3
+        },
+        {
+            "timeMs": 11960,
+            "action": 2
+        },
+        {
+            "timeMs": 11960,
+            "action": 3
+        },
+        {
+            "timeMs": 12324,
+            "action": 2
+        },
+        {
+            "timeMs": 14144,
+            "action": 0
+        },
+        {
+            "timeMs": 14326,
+            "action": 2
+        },
+        {
+            "timeMs": 14508,
+            "action": 3
+        },
+        {
+            "timeMs": 14690,
+            "action": 2
+        },
+        {
+            "timeMs": 14872,
+            "action": 0
+        },
+        {
+            "timeMs": 15054,
+            "action": 2
+        },
+        {
+            "timeMs": 15236,
+            "action": 3
+        },
+        {
+            "timeMs": 15418,
+            "action": 2
+        }
+    ]
+}

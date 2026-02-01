@@ -5,6 +5,7 @@ public class Note : MonoBehaviour
 {
     private double intervalTime;
     public int currentNoteIndex = 0;
+    public int action = 0;
     public void Awake()
     {
         intervalTime = NoteManager.Instance.intervalTime;
