@@ -18,7 +18,7 @@ public class Note : MonoBehaviour
     public void SetNoteMove(Vector3 targetPosition)
     {
         currentTween?.Kill();  // 이전 Tween 종료
-        currentTween = transform.DOMove(targetPosition, (float)intervalTime / 2);
+        currentTween = transform.DOMove(targetPosition, (float)intervalTime / 2).SetEase(Ease.OutExpo);
     }
 
     public void KillTween()

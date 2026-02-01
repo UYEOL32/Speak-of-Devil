@@ -1,9 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class NoteManager : Singleton<NoteManager>
 {
+    public Transform center = null;
+    public GameObject[] timingRect = null;
+    public Vector2[] timingBoxes;
+    List<GameObject> judgeNoteList = new List<GameObject>();
+    public double noteSpeed; 
     public int bpm;
     public int maxNoteInScreen;
     public double intervalTime;
@@ -15,21 +21,33 @@ public class NoteManager : Singleton<NoteManager>
     private double currentTime = 0d;
     List<GameObject> notes = new List<GameObject>();
     public GameObject notePrefab;
-    GameObject toRemove = null;
+    public GameObject judgeNotePrefab;
     
     private List<Vector3> notePositions = new List<Vector3>();
-    private GameObject noteInJudge = null;
-    private GameObject nextNoteInJudge = null;
     
     protected override void Awake()
     {
+        base.Awake();
+    }
+
+    public void Setting()
+    {
         intervalTime = 60d / bpm;
+        noteSpeed = bpm / 60d;
         
         xDelta = (startPos.x - endPos.x)/maxNoteInScreen;
         yDelta = (startPos.y - endPos.y)/maxNoteInScreen;
         for (int i = 0; i < maxNoteInScreen; i++)
         {
             notePositions.Add(NotePosFunc(i));
+        }
+
+        timingBoxes = new Vector2[timingRect.Length];
+
+        for (int i = 0; i < timingBoxes.Length; i++)
+        {
+            float width = timingRect[i].GetComponent<BoxCollider2D>().size.x/2;
+            timingBoxes[i].Set(center.position.x - width, center.position.x + width);
         }
     }
 
@@ -41,40 +59,44 @@ public class NoteManager : Singleton<NoteManager>
     }
     void Update()
     {
-        currentTime += Time.deltaTime;
+        if (GameManager.Instance.gameState == GameState.Playing)
+        {
+            currentTime += Time.deltaTime;
 
-        if (currentTime >= intervalTime / 2d)
-        {
-            noteInJudge = nextNoteInJudge ? nextNoteInJudge : null;
-        }
-        if (currentTime >= intervalTime)
-        {
+            if (!(currentTime >= intervalTime)) return;
             NoteMove();
+            UIManager.Instance.CallBeatEffect();
             currentTime -= intervalTime;
         }
     }
 
     public void CheckTiming(NoteType noteType)
     {
-        if (noteInJudge == null) return;
+        List<int> toRemoveList = new List<int>();
+        for (int i = 0; i < judgeNoteList.Count; i++)
+        {
+            float pos = judgeNoteList[i].transform.localPosition.x;
 
-        //노트 판정
-        if (noteInJudge.GetComponent<Note>().noteType != noteType) CheckJudgeType(JudgeType.Miss);
-        else if (currentTime <= intervalTime*0.15d || currentTime >= intervalTime*0.85d) CheckJudgeType(JudgeType.Perfect);
-        else if (currentTime <= intervalTime*0.2d || currentTime >= intervalTime*0.8d) CheckJudgeType(JudgeType.Good);
-        else if (currentTime <= intervalTime*0.3d || currentTime >= intervalTime*0.7d) CheckJudgeType(JudgeType.Bad);
-        else CheckJudgeType(JudgeType.Miss);
-        
-        RemoveNote(noteInJudge);
+            for (int x = 0; x < timingBoxes.Length; x++)
+            {
+                if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
+                {
+                    CheckJudgeType((JudgeType)x);
+                    toRemoveList.Add(i);
+                    break;
+                }
+            }
+        }
+
+        foreach (int i in toRemoveList)
+        {
+            RemoveNote(judgeNoteList[i]);
+        }
     }
     
     void NoteMove()
     {
         GenerateNote();
-        
-        //느림 판정을 위해 1비트 뒤에 제거
-        if (toRemove) RemoveNote(toRemove);
-        else toRemove = null;
     
         foreach (GameObject note in notes)
         {
@@ -84,12 +106,8 @@ public class NoteManager : Singleton<NoteManager>
 
             if (n.currentNoteIndex >= maxNoteInScreen)  // 증가 후 체크
             {
-                CheckJudgeType(JudgeType.Miss);
-                toRemove = note;
                 continue;  // 범위 초과면 SetNoteMove 호출하지 않음
             }
-
-            if (n.currentNoteIndex == maxNoteInScreen - 1) nextNoteInJudge = note;
         
             n.SetNoteMove(notePositions[n.currentNoteIndex]);
         }
@@ -98,22 +116,27 @@ public class NoteManager : Singleton<NoteManager>
     void GenerateNote()
     {
         GameObject note = Instantiate(notePrefab, notePositions[0], Quaternion.identity);
-        
+        GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen-1,-8,0), Quaternion.identity);
+        judgeNote.GetComponent<JudgeNote>().noteVisual = note;
         notes.Add(note);
+        judgeNoteList.Add(judgeNote);
     }
 
-    void RemoveNote(GameObject note)
+    public void RemoveNote(GameObject judgeNote)
     {
-        noteInJudge = null;
-        notes.Remove(note);
-        note.GetComponent<Note>().KillTween();  // Tween 종료 후 Destroy
-        Destroy(note);
+        GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
+        notes.Remove(visualNote);
+        visualNote.GetComponent<Note>().KillTween();  // Tween 종료 후 Destroy
+        Destroy(visualNote);
+        
+        judgeNoteList.Remove(judgeNote);
+        Destroy(judgeNote);
     }
     public void CheckJudgeType(JudgeType judgeType)
     {
+        GameManager.Instance.HpCheck(judgeType);
         print(judgeType);
     }
-    
 }
 
 public enum JudgeType
