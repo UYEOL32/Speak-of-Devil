@@ -22,6 +22,7 @@ public class NoteManager : Singleton<NoteManager>
     public AudioClip[] devilWarning;
 
     [Header("AUDIO SOURCE AND...!!")] public AudioSource audioSource;
+    public AudioSource sfxAudioSource;
     public double startDelaySec = 0.1d;
     public TMP_Text dspTime;
     
@@ -334,7 +335,10 @@ public class NoteManager : Singleton<NoteManager>
                 double logTimeMs = evt.timeMs - (fourBeatMs + debugFourBeatOffsetMs);
                 if (currentMs < logTimeMs) break;
 
-                audioSource.PlayOneShot(devilWarning[evt.action]);
+                if (sfxAudioSource != null)
+                {
+                    sfxAudioSource.PlayOneShot(devilWarning[evt.action]);
+                }
                 Debug.Log($"[4Beat][Spawn] Incoming {((NoteType)evt.action)}");
                 nextFourBeatIndex++;
             }
@@ -517,7 +521,10 @@ public class NoteManager : Singleton<NoteManager>
             if (TryGetTutorialNoteTypeAtBeat(nextTutorialWarnBeatIndex, out NoteType upcoming))
             {
                 Debug.Log($"[4Beat][Tutorial] Incoming {upcoming}");
-                audioSource.PlayOneShot(devilWarning[(int)upcoming]);
+                if (sfxAudioSource != null)
+                {
+                    sfxAudioSource.PlayOneShot(devilWarning[(int)upcoming]);
+                }
             }
 
             nextTutorialWarnBeatIndex = GetNextTutorialSpawnBeatIndex(nextTutorialWarnBeatIndex);
@@ -670,7 +677,10 @@ public class NoteManager : Singleton<NoteManager>
         if (idx < chart.events.Count && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
         {
             Debug.Log($"[4Beat] Incoming {((NoteType)chart.events[idx].action)}");
-            audioSource.PlayOneShot(devilWarning[chart.events[idx].action]);
+            if (sfxAudioSource != null)
+            {
+                sfxAudioSource.PlayOneShot(devilWarning[chart.events[idx].action]);
+            }
         }
 
         lastChartFourBeatIndex = beatIndex;
