@@ -31,11 +31,16 @@ public class NoteManager : Singleton<NoteManager>
     [Header("CHART")]
     public string chartResourceName = "Test";
     public float leadBeats = 5f;
+    public bool debugLeadBeat = false;
+    public bool debugFourBeat = false;
     
     private List<Vector3> notePositions = new List<Vector3>();
     private NoteChart chart;
     private int nextEventIndex = 0;
+    private int nextFourBeatIndex = 0;
     private float leadTimeMs;
+    private float fourBeatMs;
+    private int lastBeatIndex = -1;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
@@ -56,8 +61,11 @@ public class NoteManager : Singleton<NoteManager>
         intervalTime = 60d / bpm;
         noteSpeed = bpm / 60d;
         leadTimeMs = leadBeats * (60000f / bpm);
+        fourBeatMs = 4f * (60000f / bpm);
         currentTime = 0d;
         nextEventIndex = 0;
+        nextFourBeatIndex = 0;
+        lastBeatIndex = -1;
         SchedulePlayback();
         
         notePositions.Clear();
@@ -91,15 +99,10 @@ public class NoteManager : Singleton<NoteManager>
             if (!isPlaybackScheduled) return;
             if (AudioSettings.dspTime < startDspTime) return;
 
-            double currentMs = GetCurrentTimeMs();
-            SpawnDueNotes(currentMs);
 
-            currentTime += Time.deltaTime;
-
-            if (!(currentTime >= intervalTime)) return;
-            UIManager.Instance.CallBeatEffect();
-            OnEveryBeat?.Invoke();
-            currentTime -= intervalTime;
+            double songTimeMs = GetSongTimeMs();
+            SpawnDueNotes(songTimeMs);
+            HandleBeatEffect(songTimeMs);
         }
     }
 
@@ -232,18 +235,36 @@ public class NoteManager : Singleton<NoteManager>
     {
         if (chart == null || chart.events == null || chart.events.Count == 0) return;
 
+        if (debugFourBeat)
+        {
+            while (nextFourBeatIndex < chart.events.Count)
+            {
+                NoteEvent evt = chart.events[nextFourBeatIndex];
+                double logTimeMs = evt.timeMs - fourBeatMs;
+                if (currentMs < logTimeMs) break;
+
+                Debug.Log($"[4Beat] Incoming {((NoteType)evt.action)}");
+                nextFourBeatIndex++;
+            }
+        }
+
         while (nextEventIndex < chart.events.Count)
         {
             NoteEvent evt = chart.events[nextEventIndex];
             double spawnTimeMs = evt.timeMs - leadTimeMs;
             if (currentMs < spawnTimeMs) break;
 
+            if (debugLeadBeat)
+            {
+                double remainingMs = evt.timeMs - currentMs;
+                Debug.Log($"[LeadBeat] Spawn {((NoteType)evt.action)} | remaining {remainingMs:F0}ms");
+            }
             GenerateNote((NoteType)evt.action);
             nextEventIndex++;
         }
     }
 
-    private double GetCurrentTimeMs()
+    private double GetSongTimeMs()
     {
         if (isPlaybackScheduled)
         {
@@ -251,6 +272,24 @@ public class NoteManager : Singleton<NoteManager>
         }
 
         return currentTime * 1000.0;
+    }
+
+    private void HandleBeatEffect(double songTimeMs)
+    {
+        if (chart == null) return;
+
+        double beatTimeMs = songTimeMs - chart.snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (beatIndex > lastBeatIndex)
+        {
+            lastBeatIndex = beatIndex;
+            UIManager.Instance.CallBeatEffect();
+            OnEveryBeat?.Invoke();
+            currentTime -= intervalTime;
+        }
     }
 
     private void SchedulePlayback()

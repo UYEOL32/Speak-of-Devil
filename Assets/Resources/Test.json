@@ -1,103 +1,139 @@
 {
-    "songId": "song1",
+    "songId": "song2",
     "version": 1,
-    "bpm": 120.0,
-    "snapOffsetMs": 200,
+    "bpm": 129.0,
+    "snapOffsetMs": 100,
     "events": [
         {
-            "timeMs": 10700,
+            "timeMs": 10452,
             "action": 0
         },
         {
-            "timeMs": 11200,
-            "action": 1
-        },
-        {
-            "timeMs": 11700,
-            "action": 3
-        },
-        {
-            "timeMs": 12200,
+            "timeMs": 10918,
             "action": 2
         },
         {
-            "timeMs": 14700,
+            "timeMs": 11384,
             "action": 1
         },
         {
-            "timeMs": 15200,
-            "action": 3
+            "timeMs": 11617,
+            "action": 1
         },
         {
-            "timeMs": 15700,
-            "action": 2
-        },
-        {
-            "timeMs": 16200,
+            "timeMs": 11850,
             "action": 0
         },
         {
-            "timeMs": 18700,
-            "action": 1
-        },
-        {
-            "timeMs": 19200,
-            "action": 1
-        },
-        {
-            "timeMs": 19700,
-            "action": 1
-        },
-        {
-            "timeMs": 20200,
-            "action": 1
-        },
-        {
-            "timeMs": 22700,
-            "action": 2
-        },
-        {
-            "timeMs": 23200,
-            "action": 2
-        },
-        {
-            "timeMs": 23700,
-            "action": 2
-        },
-        {
-            "timeMs": 24200,
-            "action": 2
-        },
-        {
-            "timeMs": 26700,
-            "action": 3
-        },
-        {
-            "timeMs": 27200,
-            "action": 3
-        },
-        {
-            "timeMs": 27700,
-            "action": 3
-        },
-        {
-            "timeMs": 28200,
-            "action": 3
-        },
-        {
-            "timeMs": 30700,
+            "timeMs": 14180,
             "action": 0
         },
         {
-            "timeMs": 31200,
+            "timeMs": 14646,
+            "action": 3
+        },
+        {
+            "timeMs": 15112,
+            "action": 2
+        },
+        {
+            "timeMs": 15578,
+            "action": 1
+        },
+        {
+            "timeMs": 17908,
+            "action": 2
+        },
+        {
+            "timeMs": 17908,
+            "action": 2
+        },
+        {
+            "timeMs": 18374,
+            "action": 2
+        },
+        {
+            "timeMs": 18840,
+            "action": 2
+        },
+        {
+            "timeMs": 19073,
+            "action": 2
+        },
+        {
+            "timeMs": 19306,
+            "action": 2
+        },
+        {
+            "timeMs": 21403,
+            "action": 1
+        },
+        {
+            "timeMs": 21636,
+            "action": 1
+        },
+        {
+            "timeMs": 21869,
+            "action": 1
+        },
+        {
+            "timeMs": 22335,
+            "action": 1
+        },
+        {
+            "timeMs": 22568,
+            "action": 1
+        },
+        {
+            "timeMs": 22801,
+            "action": 1
+        },
+        {
+            "timeMs": 25131,
+            "action": 3
+        },
+        {
+            "timeMs": 25364,
+            "action": 3
+        },
+        {
+            "timeMs": 25597,
+            "action": 3
+        },
+        {
+            "timeMs": 26063,
+            "action": 3
+        },
+        {
+            "timeMs": 26296,
+            "action": 3
+        },
+        {
+            "timeMs": 26529,
+            "action": 3
+        },
+        {
+            "timeMs": 28859,
             "action": 0
         },
         {
-            "timeMs": 31700,
+            "timeMs": 29092,
             "action": 0
         },
         {
-            "timeMs": 32200,
+            "timeMs": 29325,
+            "action": 0
+        },
+        {
+            "timeMs": 29791,
+            "action": 0
+        },
+        {
+            "timeMs": 30024,
+            "action": 0
+        },
+        {
+            "timeMs": 30257,
             "action": 0
         }
     ]
