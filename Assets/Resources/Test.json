@@ -14,11 +14,11 @@
         },
         {
             "timeMs": 11700,
-            "action": 0
+            "action": 5
         },
         {
             "timeMs": 12200,
-            "action": 0
+            "action": 6
         },
         {
             "timeMs": 14700,
@@ -62,11 +62,11 @@
         },
         {
             "timeMs": 22950,
-            "action": 2
+            "action": 5
         },
         {
             "timeMs": 23200,
-            "action": 1
+            "action": 6
         },
         {
             "timeMs": 23700,
