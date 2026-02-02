@@ -19,16 +19,33 @@ public class Note : MonoBehaviour
         noteType = NoteType.Up;
     }
 
-    public void InitMove(List<Vector3> path, double interval, int max)
+    public void InitMove(List<Vector3> path, double interval, int max, float offsetRate)
     {
-        notePositions = path;
+
+        notePositions = new List<Vector3>(path.Count);
+        
+        for(int i = 0; i<path.Count; i++)
+        {
+            if (i == 0) notePositions.Add(path[i]); 
+            else if (i < path.Count - 1)
+            {
+                Vector3 tmp = Vector3.Lerp(path[i], path[i - 1], offsetRate);
+                notePositions.Add(tmp);
+            }
+            else notePositions.Add(new Vector3(path[i].x + offsetRate, path[i].y, path[i].z));
+        }
+        
         intervalTime = interval;
         maxNoteInScreen = max;
         currentNoteIndex = 0;
+        
+        SetNoteMove(notePositions[currentNoteIndex]);
 
         if (moveRoutine != null) StopCoroutine(moveRoutine);
         moveRoutine = StartCoroutine(MoveRoutine());
     }
+
+    public void InitMove(List<Vector3> path, double interval, int max) => InitMove(path, interval, max, 0);
 
     private IEnumerator MoveRoutine()
     {

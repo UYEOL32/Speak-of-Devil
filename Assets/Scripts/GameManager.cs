@@ -32,8 +32,12 @@ public class GameManager : SingletonPersistence<GameManager>
         switch (gameState)
         {
             case GameState.Playing:
-                SceneManager.LoadScene("Stage");
+
+                if(SceneManager.GetActiveScene().name != "Stage") SceneManager.LoadScene("Stage");
+
                 hp = maxHp;
+
+
                 NoteManager.Instance.Setting();
                 UIManager.Instance.UIReset();
                 break;

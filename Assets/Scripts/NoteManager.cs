@@ -9,7 +9,7 @@ public class NoteManager : Singleton<NoteManager>
     public Transform center = null;
     public GameObject[] timingRect = null;
     public Vector2[] timingBoxes;
-    List<GameObject> judgeNoteList = new List<GameObject>();
+    private readonly Queue<GameObject> judgeNoteQueue = new Queue<GameObject>();
     public double noteSpeed;    
     public int bpm;
     public int maxNoteInScreen;
@@ -24,7 +24,7 @@ public class NoteManager : Singleton<NoteManager>
     public TMP_Text dspTime;
     
     private double currentTime = 0d;
-    List<GameObject> notes = new List<GameObject>();
+    private readonly List<GameObject> notes = new List<GameObject>();
     public GameObject notePrefab;
     public GameObject judgeNotePrefab;
 
@@ -137,34 +137,30 @@ public class NoteManager : Singleton<NoteManager>
     }
     public void CheckTiming(NoteType noteType)
     {
-        List<int> toRemoveList = new List<int>();
-        for (int i = 0; i < judgeNoteList.Count; i++)
+        if (judgeNoteQueue.Count == 0) return;
+
+        GameObject judgeObject = judgeNoteQueue.Peek();
+        if (judgeObject == null) return;
+
+        JudgeNote judgeNote = judgeObject.GetComponent<JudgeNote>();
+        if (judgeNote == null || judgeNote.noteVisual == null) return;
+
+        Note targetNote = judgeNote.noteVisual.GetComponent<Note>();
+        if (targetNote == null || targetNote.noteType != noteType) return;
+
+        float pos = judgeObject.transform.localPosition.x;
+        for (int x = 0; x < timingBoxes.Length; x++)
         {
-            JudgeNote judgeNote = judgeNoteList[i].GetComponent<JudgeNote>();
-            if (judgeNote == null || judgeNote.noteVisual == null) continue;
-            Note note = judgeNote.noteVisual.GetComponent<Note>();
-            if (note == null || note.noteType != noteType) continue;
-
-            float pos = judgeNoteList[i].transform.localPosition.x;
-
-            for (int x = 0; x < timingBoxes.Length; x++)
+            if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
             {
-                if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
-                {
-                    CheckJudgeType((JudgeType)x);
-                    toRemoveList.Add(i);
-                    break;
-                }
+                CheckJudgeType((JudgeType)x);
+                RemoveFrontNote();
+                break;
             }
         }
-
-        foreach (int i in toRemoveList)
-        {
-            RemoveNote(judgeNoteList[i]);
-        }
     }
-    
-    void GenerateNote(NoteType noteType)
+
+    void GenerateNote(NoteType noteType, int inBeatOffset)
     {
         if (notePositions.Count == 0) return;
         GameObject note = Instantiate(notePrefab, notePositions[0], Quaternion.identity);
@@ -173,7 +169,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             noteComponent.noteType = noteType;
             noteComponent.SetVisualDirection(noteType);
-            noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen);
+            noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen, inBeatOffset/((float)intervalTime*1000));
         }
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen,-8,0), Quaternion.identity);
         note.transform.SetParent(transform);
@@ -181,31 +177,28 @@ public class NoteManager : Singleton<NoteManager>
         judgeNote.GetComponent<JudgeNote>().noteVisual = note;
         
         notes.Add(note);
-        judgeNoteList.Add(judgeNote);
+        judgeNoteQueue.Enqueue(judgeNote);
     }
+    
+    void GenerateNote(NoteType noteType) => GenerateNote(noteType, 0);
 
-    public void RemoveNote(GameObject judgeNote)
+    public void RemoveFrontNote()
     {
-        if (judgeNote == null) return;
+        if (judgeNoteQueue.Count == 0) return;
 
-        JudgeNote judgeNoteComponent = judgeNote.GetComponent<JudgeNote>();
-        if (judgeNoteComponent == null) return;
-
-        GameObject visualNote = judgeNoteComponent.noteVisual;
-        
-        if (visualNote != null)
+        GameObject judgeNote = judgeNoteQueue.Dequeue();
+        if (judgeNote != null)
         {
-            notes.Remove(visualNote);
-            Note noteComponent = visualNote.GetComponent<Note>();
-            if (noteComponent != null)
+            GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
+            if (visualNote != null)
             {
-                noteComponent.KillTween();
+                notes.Remove(visualNote);
+                Note note = visualNote.GetComponent<Note>();
+                if (note != null) note.KillTween();
+                Destroy(visualNote);
             }
-            Destroy(visualNote);
+            Destroy(judgeNote);
         }
-        
-        judgeNoteList.Remove(judgeNote);
-        Destroy(judgeNote);
     }
     public void CheckJudgeType(JudgeType judgeType)
     {
@@ -259,7 +252,7 @@ public class NoteManager : Singleton<NoteManager>
                 double remainingMs = evt.timeMs - currentMs;
                 Debug.Log($"[LeadBeat] Spawn {((NoteType)evt.action)} | remaining {remainingMs:F0}ms");
             }
-            GenerateNote((NoteType)evt.action);
+            GenerateNote((NoteType)evt.action, ((int)(currentMs - chart.snapOffsetMs) % (int)(intervalTime * 1000)));
             nextEventIndex++;
         }
     }
