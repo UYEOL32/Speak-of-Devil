@@ -17,9 +17,11 @@ public class JudgeNote : MonoBehaviour
         {
             transform.position += Vector3.left * ((float)noteSpeed * Time.deltaTime);
 
-        if (!(NoteManager.Instance.timingBoxes[2].x > transform.position.x)) return;
-        NoteManager.Instance.CheckJudgeType(JudgeType.Miss);
-        NoteManager.Instance.RemoveFrontNote();
+
+            if (!(NoteManager.Instance.timingBoxes[2].x > transform.position.x)) return;
+            NoteManager.Instance.CheckJudgeType(JudgeType.Miss);
+
+            NoteManager.Instance.RemoveFrontNote(JudgeType.Miss);
         }
     }
 }

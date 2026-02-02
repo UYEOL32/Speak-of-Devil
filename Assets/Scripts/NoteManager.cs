@@ -38,7 +38,9 @@ public class NoteManager : Singleton<NoteManager>
     public bool isTutorial = false;
     public int tutorialRestBeats = 4;
     public int tutorialSpawnBeats = 4;
-    public int tutorialMode = 1;
+    public int tutorialMode = 0;
+    public int tutorialMaxMode = 2;
+    public int tutorialSuccessesToAdvance = 3;
     public NoteType[] tutorialPattern;
     
     private List<Vector3> notePositions = new List<Vector3>();
@@ -52,13 +54,68 @@ public class NoteManager : Singleton<NoteManager>
     private int tutorialPatternIndex = 0;
     private int lastTutorialFourBeatIndex = -1;
     private int lastChartFourBeatIndex = -1;
+    private int currentTutorialCycleId = -1;
+    private int tutorialSuccessCount = 0;
+    private readonly Dictionary<int, TutorialCycleState> tutorialCycles = new Dictionary<int, TutorialCycleState>();
+    private int tutorialStartBeat = 0;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
+<<<<<<< HEAD
     public Action OnEveryBeat;
+=======
+    public TMP_Text tutorialText;
+    public bool chatAvailable;
+
+    public int nextTutorialMode;
+
+    public int[] tutorialDialogIndex;
+    public string[] tutorialDialog;
+
+    public int currentDialogIndex = -1;
+    
+    public void ProceedTutorial()
+    {
+        if (!chatAvailable) return;
+
+        if (nextTutorialMode < tutorialDialogIndex.Length)
+        {
+            if (currentDialogIndex < tutorialDialogIndex[nextTutorialMode] - 1)
+            {
+                currentDialogIndex++;
+                tutorialText.text = tutorialDialog[currentDialogIndex];
+            }
+            else
+            {
+                bool wasPaused = tutorialMode < 0;
+                tutorialMode = nextTutorialMode;
+                chatAvailable = false;
+                if (wasPaused)
+                {
+                    ScheduleTutorialStart(4);
+                }
+            }
+        }
+        else
+        {
+            if (currentDialogIndex < tutorialDialog.Length - 1)
+            {
+                currentDialogIndex++;
+                tutorialText.text = tutorialDialog[currentDialogIndex];
+            }
+            else
+            {
+                Debug.Log("튜토리얼은 끝!입니다~");
+            }
+        }
+        
+    }
+
+>>>>>>> 861c6c3 (tutorial api wip 1)
     public void Setting()
     {
         LoadChart();
+        ProceedTutorial();
         if (bpm <= 0)
         {
             Debug.LogError("BPM must be greater than 0.");
@@ -81,6 +138,10 @@ public class NoteManager : Singleton<NoteManager>
         tutorialPatternIndex = 0;
         lastTutorialFourBeatIndex = -1;
         lastChartFourBeatIndex = -1;
+        currentTutorialCycleId = -1;
+        tutorialSuccessCount = 0;
+        tutorialCycles.Clear();
+        tutorialStartBeat = 0;
         SchedulePlayback();
         
         notePositions.Clear();
@@ -176,13 +237,13 @@ public class NoteManager : Singleton<NoteManager>
             if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
             {
                 CheckJudgeType((JudgeType)x);
-                RemoveFrontNote();
+                RemoveFrontNote((JudgeType)x);
                 break;
             }
         }
     }
 
-    void GenerateNote(NoteType noteType, int inBeatOffset)
+    void GenerateNote(NoteType noteType, int inBeatOffset, int tutorialCycleId = -1)
     {
         if (notePositions.Count == 0) return;
         GameObject note = Instantiate(notePrefab, notePositions[0], Quaternion.identity);
@@ -190,6 +251,7 @@ public class NoteManager : Singleton<NoteManager>
         if (noteComponent != null)
         {
             noteComponent.noteType = noteType;
+            noteComponent.tutorialCycleId = tutorialCycleId;
             noteComponent.SetVisualDirection(noteType);
             noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen, inBeatOffset/((float)intervalTime*1000));
         }
@@ -204,7 +266,7 @@ public class NoteManager : Singleton<NoteManager>
     
     void GenerateNote(NoteType noteType) => GenerateNote(noteType, 0);
 
-    public void RemoveFrontNote()
+    public void RemoveFrontNote(JudgeType judgeType)
     {
         if (judgeNoteQueue.Count == 0) return;
 
@@ -216,7 +278,11 @@ public class NoteManager : Singleton<NoteManager>
             {
                 notes.Remove(visualNote);
                 Note note = visualNote.GetComponent<Note>();
-                if (note != null) note.KillTween();
+                if (note != null)
+                {
+                    HandleTutorialJudge(note, judgeType);
+                    note.KillTween();
+                }
                 Destroy(visualNote);
             }
             Destroy(judgeNote);
@@ -311,6 +377,7 @@ public class NoteManager : Singleton<NoteManager>
 
     private void HandleTutorial(double songTimeMs)
     {
+        if (tutorialMode < 0) return;
         if (tutorialRestBeats < 0 || tutorialSpawnBeats <= 0) return;
 
         int snapOffsetMs = chart != null ? chart.snapOffsetMs : 0;
@@ -318,17 +385,28 @@ public class NoteManager : Singleton<NoteManager>
         if (beatTimeMs < 0) return;
 
         double beatIntervalMs = intervalTime * 1000.0;
-        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        int globalBeatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (globalBeatIndex < tutorialStartBeat) return;
+
+        int beatIndex = globalBeatIndex - tutorialStartBeat;
         if (beatIndex == lastTutorialBeatIndex) return;
 
-        lastTutorialBeatIndex = beatIndex;
         int cycle = tutorialRestBeats + tutorialSpawnBeats;
         if (cycle <= 0) return;
 
+        int cycleId = beatIndex / cycle;
+        if (cycleId != currentTutorialCycleId)
+        {
+            CloseTutorialCycle(currentTutorialCycleId);
+            if (tutorialMode < 0) return;
+            currentTutorialCycleId = cycleId;
+        }
+
+        lastTutorialBeatIndex = beatIndex;
         if (debugFourBeat && lastTutorialFourBeatIndex != beatIndex)
         {
             int warnBeat = beatIndex + 4 - leadBeats;
-            if (TryGetTutorialNoteTypeAtBeat(warnBeat, out NoteType upcoming))
+            if (warnBeat > 0 && TryGetTutorialNoteTypeAtBeat(warnBeat, out NoteType upcoming))
             {
                 Debug.Log($"[4Beat][Tutorial] Incoming {upcoming}");
                 lastTutorialFourBeatIndex = beatIndex;
@@ -338,7 +416,8 @@ public class NoteManager : Singleton<NoteManager>
         if (!IsTutorialSpawnBeat(beatIndex)) return;
 
         NoteType type = GetTutorialNoteType(true);
-        GenerateNote(type);
+        GenerateNote(type, 0, cycleId);
+        RegisterTutorialSpawn(cycleId);
     }
 
     private bool IsTutorialSpawnBeat(int beatIndex)
@@ -347,7 +426,7 @@ public class NoteManager : Singleton<NoteManager>
         if (cycle <= 0) return false;
 
         int cyclePos = ((beatIndex % cycle) + cycle) % cycle;
-        if (tutorialMode == 1)
+        if (tutorialMode <= 0)
         {
             return cyclePos == tutorialRestBeats;
         }
@@ -359,7 +438,7 @@ public class NoteManager : Singleton<NoteManager>
     {
         if (tutorialPattern == null || tutorialPattern.Length == 0) return NoteType.Up;
 
-        if (tutorialMode == 2)
+        if (tutorialMode == 1)
         {
             return tutorialPattern[0];
         }
@@ -384,7 +463,7 @@ public class NoteManager : Singleton<NoteManager>
             return true;
         }
 
-        if (tutorialMode == 2)
+        if (tutorialMode == 1)
         {
             type = tutorialPattern[0];
             return true;
@@ -393,7 +472,7 @@ public class NoteManager : Singleton<NoteManager>
         int cyclesBefore = (beatIndex - cyclePos) / cycle;
         int spawnIndex;
 
-        if (tutorialMode == 1)
+        if (tutorialMode <= 0)
         {
             spawnIndex = cyclesBefore;
         }
@@ -403,8 +482,108 @@ public class NoteManager : Singleton<NoteManager>
             spawnIndex = (cyclesBefore * tutorialSpawnBeats) + spawnIndexInCycle;
         }
 
-        type = tutorialPattern[spawnIndex % tutorialPattern.Length];
+        int len = tutorialPattern.Length;
+        int index = spawnIndex % len;
+        if (index < 0) index += len;
+        type = tutorialPattern[index];
         return true;
+    }
+
+    private void RegisterTutorialSpawn(int cycleId)
+    {
+        if (cycleId < 0) return;
+
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state))
+        {
+            state = new TutorialCycleState();
+            tutorialCycles[cycleId] = state;
+        }
+
+        state.expected++;
+    }
+
+    private void HandleTutorialJudge(Note note, JudgeType judgeType)
+    {
+        if (!isTutorial || tutorialMode < 0 || note == null) return;
+        int cycleId = note.tutorialCycleId;
+        if (cycleId < 0) return;
+
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state)) return;
+
+        if (judgeType == JudgeType.Miss) state.failed = true;
+        state.judged++;
+
+        TryFinalizeTutorialCycle(cycleId, state);
+    }
+
+    private void CloseTutorialCycle(int cycleId)
+    {
+        if (cycleId < 0) return;
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state)) return;
+
+        state.closed = true;
+        TryFinalizeTutorialCycle(cycleId, state);
+    }
+
+    private void TryFinalizeTutorialCycle(int cycleId, TutorialCycleState state)
+    {
+        if (!state.closed) return;
+        if (state.judged < state.expected) return;
+
+        if (state.failed)
+        {
+            tutorialSuccessCount = 0;
+        }
+        else
+        {
+            tutorialSuccessCount++;
+            if (tutorialSuccessCount >= tutorialSuccessesToAdvance)
+            {
+                AdvanceTutorialMode();
+
+            }
+        }
+
+        tutorialCycles.Remove(cycleId);
+    }
+
+    private void AdvanceTutorialMode()
+    {
+        tutorialSuccessCount = 0;
+        tutorialPatternIndex = 0;
+        currentTutorialCycleId = -1;
+        tutorialCycles.Clear();
+
+        nextTutorialMode = tutorialMode + 1;
+        tutorialMode = -1;
+        chatAvailable = true;
+        ProceedTutorial();
+        if (tutorialMode > tutorialMaxMode)
+        {
+            tutorialMode = -1;
+            Debug.Log("튜토리얼 성공");
+        }
+    }
+
+    private void ScheduleTutorialStart(int beatsDelay)
+    {
+        int delay = Mathf.Max(0, beatsDelay);
+        tutorialStartBeat = GetCurrentGlobalBeat() + delay;
+        lastTutorialBeatIndex = -1;
+        lastTutorialFourBeatIndex = -1;
+        currentTutorialCycleId = -1;
+        tutorialCycles.Clear();
+    }
+
+    private int GetCurrentGlobalBeat()
+    {
+        if (intervalTime <= 0) return 0;
+        double songTimeMs = GetSongTimeMs();
+        int snapOffsetMs = chart != null ? chart.snapOffsetMs : 0;
+        double beatTimeMs = songTimeMs - snapOffsetMs;
+        if (beatTimeMs < 0) return 0;
+        double beatIntervalMs = intervalTime * 1000.0;
+        return (int)Math.Floor(beatTimeMs / beatIntervalMs);
     }
 
     private void LogChartFourBeat(double songTimeMs)
@@ -430,6 +609,14 @@ public class NoteManager : Singleton<NoteManager>
         }
 
         lastChartFourBeatIndex = beatIndex;
+    }
+
+    private class TutorialCycleState
+    {
+        public int expected;
+        public int judged;
+        public bool failed;
+        public bool closed;
     }
 
     private void SchedulePlayback()

@@ -9,6 +9,7 @@ public class Note : MonoBehaviour
     private double intervalTime;
     public int currentNoteIndex = 0;
     public NoteType noteType;
+    public int tutorialCycleId = -1;
     private Tweener currentTween;  // Tween 참조 저장
     private List<Vector3> notePositions;
     private int maxNoteInScreen;

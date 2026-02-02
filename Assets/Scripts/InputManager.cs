@@ -27,4 +27,10 @@ public class InputManager : MonoBehaviour
         
         NoteManager.Instance.CheckTiming(NoteType.Right);
     }
+    public void TutorialProceed(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        
+        NoteManager.Instance.ProceedTutorial();
+    }
 }
