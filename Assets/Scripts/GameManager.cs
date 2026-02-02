@@ -14,7 +14,7 @@ public class GameManager : SingletonPersistence<GameManager>
         base.Awake();
 
         if (SceneManager.GetActiveScene().name == "Title") UpdateGameState(GameState.Menu);
-        else if (SceneManager.GetActiveScene().name == "Stage") UpdateGameState(GameState.Playing);
+        else UpdateGameState(GameState.Playing);
     }
 
     public void UpdateGameState(GameState newGameState)
