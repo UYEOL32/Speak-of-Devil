@@ -48,6 +48,10 @@ public class NoteManager : Singleton<NoteManager>
     public bool debugBossAnim = false;
     public int bossIdleLockBeats = 2;
 
+    [Header("PLAYER ANIM")]
+    public UnitAnimator playerUnitAnimator;
+    public bool debugPlayerAnim = false;
+
     [Header("TUTORIAL")]
     public bool isTutorial = false;
     public int tutorialRestBeats = 4;
@@ -786,6 +790,20 @@ public class NoteManager : Singleton<NoteManager>
         {
             bossUnitAnimator.PlayAnimation();
         }
+    }
+
+    public void TriggerPlayerAnimation(NoteType noteType)
+    {
+        if (GameManager.Instance.gameState != GameState.Playing) return;
+        if (playerUnitAnimator == null) return;
+
+        int index = ((int)noteType) + 1;
+        if (debugPlayerAnim)
+        {
+            Debug.Log($"[PlayerAnim] noteType={noteType} index={index}");
+        }
+        playerUnitAnimator.SetAnimationIndex(index);
+        playerUnitAnimator.PlayAnimation();
     }
 
     private class TutorialCycleState
