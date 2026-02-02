@@ -28,6 +28,7 @@ public class NoteManager : Singleton<NoteManager>
     public AudioSource sfxAudioSource;
     public AudioClip[] inputSfxClips = new AudioClip[4];
     public AudioClip goodOrBetterSfx;
+    public AudioClip goodOrBetterBreakDownSfx;
     public double startDelaySec = 0.1d;
     public TMP_Text dspTime;
     
@@ -151,6 +152,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             ResolveSongById();
         }
+        ResetBreakDownMode();
         ClearAllNotes();
         LoadChart();
         ProceedTutorial();
@@ -243,6 +245,8 @@ public class NoteManager : Singleton<NoteManager>
         breakPanel.DOAnchorPosX(0, 0.2f, false);
 
         volume.enabled = true;
+
+        sfxAudioSource.PlayOneShot(breakClip);
         
         volume.profile.TryGet(out Bloom color);
         volume.profile.TryGet(out ChromaticAberration abre);
@@ -255,24 +259,75 @@ public class NoteManager : Singleton<NoteManager>
     {
        downPanel.DOAnchorPosX(0, 0.2f, false);
        
+       sfxAudioSource.PlayOneShot(downClip);
+       
        volume.profile.TryGet(out ColorAdjustments color);
        volume.profile.TryGet(out Vignette abre);
+       volume.profile.TryGet(out LensDistortion dist);
+
+       dist.intensity.overrideState = true;
+       DOTween.To(
+               () => dist.intensity.value,
+               x => dist.intensity.value = x,
+               -1f,
+               (float)intervalTime
+           )
+           .SetEase(Ease.InQuart);
+
 
        color.active = true;
        abre.active = true;
     }
 
+
+    public AudioClip breakClip, downClip, outClip;
     public void BreakDownStart()
     {
-        volume.enabled = false;
+        volume.profile.TryGet(out Bloom color);
+        volume.profile.TryGet(out ChromaticAberration abre);
+        volume.profile.TryGet(out ColorAdjustments a);
+        volume.profile.TryGet(out Vignette v);
+        
+
+        color.active = false;
+        abre.active = false;
+        a.active = false;
+        v.active = false;
         
         breakDownCanvas.gameObject.SetActive(false);
         breakDownMode = true;
+        
+        
+        volume.profile.TryGet(out LensDistortion dist);
+
+        dist.intensity.overrideState = true;
+        DOTween.To(
+                () => dist.intensity.value,
+                x => dist.intensity.value = x,
+                0,
+                (float)intervalTime
+            )
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => volume.enabled = false);
     }
 
     public void BreakDownEnd()
     {
+        sfxAudioSource.PlayOneShot(outClip);
         breakDownMode = false;
+    }
+
+    private void ResetBreakDownMode()
+    {
+        breakDownMode = false;
+        if (breakDownCanvas != null)
+        {
+            breakDownCanvas.gameObject.SetActive(false);
+        }
+        if (volume != null)
+        {
+            volume.enabled = false;
+        }
     }
     
     private Vector3 NotePosFunc(int x)
@@ -459,7 +514,10 @@ public class NoteManager : Singleton<NoteManager>
         if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
         if (judgeType <= JudgeType.Good && sfxAudioSource != null && goodOrBetterSfx != null)
         {
-            sfxAudioSource.PlayOneShot(goodOrBetterSfx);
+            AudioClip clip = breakDownMode && goodOrBetterBreakDownSfx != null
+                ? goodOrBetterBreakDownSfx
+                : goodOrBetterSfx;
+            sfxAudioSource.PlayOneShot(clip);
         }
         
         UIManager.Instance.ChangeJudgeIconAndJudgeText(judgeType, noteType);
