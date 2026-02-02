@@ -10,6 +10,7 @@ public class UIManager : Singleton<UIManager>
 {
     [Header("UI Elements")]
     [SerializeField] GameObject beatEffect;
+    [SerializeField] GameObject hpObject;
     [SerializeField] Slider hpBar;
     [SerializeField] RectTransform gameOverEffect;
     [SerializeField] TextMeshProUGUI gameOverText;
@@ -19,6 +20,13 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
 
+    void Start()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            
+        }
+    }
     public void UIReset()
     {
         beatEffect?.SetActive(false);

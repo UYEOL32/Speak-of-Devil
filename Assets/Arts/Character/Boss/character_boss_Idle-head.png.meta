@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c63a9f580bc19404fb310716073dc1c5
+guid: 1e063f47e7580c9458a946b239766bb7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6544262686639831625
-    second: character_boss_1-head_0
+      213: 1944166202487691929
+    second: character_boss_Idle-head_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: character_boss_1-head_0
+      name: character_boss_Idle-head_0
       rect:
         serializedVersion: 2
-        x: 220
-        y: 134
-        width: 603
-        height: 502
+        x: 209
+        y: 190
+        width: 656
+        height: 484
       alignment: 9
-      pivot: {x: 0.51129484, y: -0.12642893}
+      pivot: {x: 0.5597615, y: -0.30513018}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 94ab2029d34e1da50800000000000000
-      internalID: 6544262686639831625
+      spriteID: 99a599b4cd01bfa10800000000000000
+      internalID: 1944166202487691929
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 073ee165eabbfb9459504cbb2f42cbed
+    spriteID: d738bbc3592cb364c9de4ba937ba6b59
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      character_boss_1-head_0: 6544262686639831625
+      character_boss_Idle-head_0: 1944166202487691929
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
