@@ -15,7 +15,7 @@ public class GameManager : SingletonPersistence<GameManager>
     {
         base.Awake();
 
-        if (SceneManager.GetActiveScene().name == "Title") UpdateGameState(GameState.Menu);
+        if (SceneManager.GetActiveScene().name == "Title") UpdateGameState(GameState.Title);
         else UpdateGameState(GameState.Playing);
     }
 
@@ -29,8 +29,10 @@ public class GameManager : SingletonPersistence<GameManager>
                 if(SceneManager.GetActiveScene().name != "Stage") SceneManager.LoadScene("Stage");
                 hp = maxHp;
                 NoteManager.Instance.Setting();
+                UIManager.Instance.UIReset();
                 break;
-            case GameState.Menu:
+            case GameState.Title:
+                if(SceneManager.GetActiveScene().name != "Title") SceneManager.LoadScene("Title");
                 break;
             case GameState.Clear:
                 break;
@@ -43,6 +45,7 @@ public class GameManager : SingletonPersistence<GameManager>
 
     public void HpCheck(JudgeType judgeType)
     {
+        return;
         switch (judgeType)
         {
             case JudgeType.Perfect:
@@ -70,7 +73,7 @@ public class GameManager : SingletonPersistence<GameManager>
 public enum GameState
 {
     Playing,
-    Menu,
+    Title,
     Clear,
     GameOver,
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -38,8 +39,17 @@ public class NoteManager : Singleton<NoteManager>
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
+    public Action OnEveryBeat;
     public void Setting()
     {
+        if(judgeNoteList.Count != 0)
+            foreach (GameObject judgeNote in judgeNoteList.ToList())
+                RemoveNote(judgeNote);
+
+        if (notes.Count != 0)
+            foreach (GameObject note in notes.ToList())
+                RemoveNote(note);
+        
         LoadChart();
         if (bpm <= 0)
         {
@@ -96,6 +106,7 @@ public class NoteManager : Singleton<NoteManager>
 
             if (!(currentTime >= intervalTime)) return;
             UIManager.Instance.CallBeatEffect();
+            OnEveryBeat?.Invoke();
             currentTime -= intervalTime;
         }
     }

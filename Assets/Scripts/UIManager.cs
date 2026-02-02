@@ -13,28 +13,23 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Slider hpBar;
     [SerializeField] RectTransform gameOverEffect;
     [SerializeField] TextMeshProUGUI gameOverText;
+    [SerializeField] Button restartButton;
+    [SerializeField] Button exitButton;
 
     [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
-    protected override void Awake()
-    {
-        base.Awake();
-    }
 
-    void UIReset()
+    public void UIReset()
     {
         beatEffect.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
         gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
         gameOverEffect.anchoredPosition = new Vector2(0, 1080);
         hpBar.maxValue = GameManager.Instance.maxHp;
         hpBar.value = hpBar.maxValue;
     }
     
-    void Start()
-    {
-        UIReset();
-    }
-
     public void CallBeatEffect()
     {
         if (beatCoroutine != null)
@@ -78,7 +73,21 @@ public class UIManager : Singleton<UIManager>
         gameOverEffect.DOAnchorPos(targetPos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() => 
         {
             gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
-            gameOverText.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
+            gameOverText.DOFade(1f, 0.3f).SetEase(Ease.OutQuad).OnComplete(() =>
+                {
+                    restartButton.gameObject.SetActive(true);
+                    exitButton.gameObject.SetActive(true);
+                });
         });
+    }
+
+    public void OnClickExit()
+    {
+        GameManager.Instance.UpdateGameState(GameState.Title);
+    }
+
+    public void OnClickRestart()
+    {
+        GameManager.Instance.UpdateGameState(GameState.Playing);
     }
 }
