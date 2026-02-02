@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameState: 1
-  maxHp: 100
+  maxHp: 200
   currSong: 
 --- !u!1 &217594052
 GameObject:

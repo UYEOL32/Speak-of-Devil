@@ -22,6 +22,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] List<Sprite> judgeTexts = new List<Sprite>();
     [SerializeField] Image judgeTextImage;
     [SerializeField] Image speechBubble;
+    [SerializeField] Sprite transparentSprite;
     
     [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
@@ -33,6 +34,8 @@ public class UIManager : Singleton<UIManager>
         exitButton?.gameObject.SetActive(false);
         arrowImage?.gameObject.SetActive(true);
         judgeTextImage?.gameObject.SetActive(true);
+        arrowImage.sprite = transparentSprite;
+        judgeTextImage.sprite = transparentSprite;
         speechBubble?.gameObject.SetActive(true);
         gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
         gameOverEffect.anchoredPosition = new Vector2(0, 1080);

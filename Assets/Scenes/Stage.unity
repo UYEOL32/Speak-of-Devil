@@ -1807,9 +1807,11 @@ MonoBehaviour:
   intervalTime: 0
   startPos: {x: 9, y: 2, z: 0}
   endPos: {x: -3, y: -2, z: 0}
-  devilWarning: [{fileID: 8300000, guid: 94e23d0678d9147a498364e0148c3b0a, type: 3},
-    {fileID: 8300000, guid: eaa02d68de7c944bca87b62d4b028c1a, type: 3}, {fileID: 8300000, guid: 5691801d766f54090b4504539ab0fd59, type: 3},
-    {fileID: 8300000, guid: 25f0fc18bc46d49878978475fa4bd013, type: 3}]
+  devilWarning:
+  - {fileID: 8300000, guid: 94e23d0678d9147a498364e0148c3b0a, type: 3}
+  - {fileID: 8300000, guid: eaa02d68de7c944bca87b62d4b028c1a, type: 3}
+  - {fileID: 8300000, guid: 5691801d766f54090b4504539ab0fd59, type: 3}
+  - {fileID: 8300000, guid: 25f0fc18bc46d49878978475fa4bd013, type: 3}
   audioSource: {fileID: 802659861}
   sfxAudioSource: {fileID: 802659862}
   inputSfxClips:
@@ -1828,11 +1830,24 @@ MonoBehaviour:
   debugLeadBeat: 0
   debugFourBeat: 1
   debugFourBeatOffsetMs: 100
+  debugEveryFourBeats: 1
   useSongId: 1
   songId: song1
-  songEntries: [{songId: Hellfire On Sahara, chartResourceName: song1, audioClip: {fileID: 0}},
-    {songId: Knocking On Hell's Door, chartResourceName: song2, audioClip: {fileID: 0}},
-    {songId: Rip Out Devil's Heart, chartResourceName: song3, audioClip: {fileID: 0}}]
+  songEntries:
+  - songId: Hellfire On Sahara
+    chartResourceName: song1
+    audioClip: {fileID: 0}
+  - songId: Knocking On Hell's Door
+    chartResourceName: song2
+    audioClip: {fileID: 0}
+  - songId: Rip Out Devil's Heart
+    chartResourceName: song3
+    audioClip: {fileID: 0}
+  bossUnitAnimator: {fileID: 535513534}
+  debugBossAnim: 0
+  bossIdleLockBeats: 2
+  playerUnitAnimator: {fileID: 404831205}
+  debugPlayerAnim: 0
   isTutorial: 0
   tutorialRestBeats: 4
   tutorialSpawnBeats: 4
@@ -1840,25 +1855,17 @@ MonoBehaviour:
   tutorialMaxMode: 2
   tutorialSuccessesToAdvance: 3
   tutorialPattern: 
+  hitTargets:
+  - {fileID: 1477820582}
+  - {fileID: 1477820581}
+  - {fileID: 1477820580}
+  - {fileID: 1477820579}
   tutorialText: {fileID: 0}
   chatAvailable: 0
   nextTutorialMode: 0
   tutorialDialogIndex: 
   tutorialDialog: []
   currentDialogIndex: -1
-  judgeEffect: {fileID: 0}
-  colors: []
-  debugEveryFourBeats: 1
-  bossUnitAnimator: {fileID: 535513534}
-  debugBossAnim: 0
-  bossIdleLockBeats: 2
-  playerUnitAnimator: {fileID: 404831205}
-  debugPlayerAnim: 0
-  hitTargets:
-  - {fileID: 1477820582}
-  - {fileID: 1477820581}
-  - {fileID: 1477820580}
-  - {fileID: 1477820579}
   breakDownCanvas: {fileID: 1264292870}
   breakPanel: {fileID: 346326569}
   downPanel: {fileID: 218517299}
@@ -1867,6 +1874,8 @@ MonoBehaviour:
   breakClip: {fileID: 8300000, guid: 73f78d01c929b401985f148c598452e1, type: 3}
   downClip: {fileID: 8300000, guid: 0a02d383376474b6c91a6a1fe21019dd, type: 3}
   outClip: {fileID: 8300000, guid: e890f9224024d4b58b5e72c8f4fe5eb0, type: 3}
+  judgeEffect: {fileID: 0}
+  colors: []
 --- !u!82 &802659861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3446,7 +3455,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 6eb47bde-42fc-4e4a-bf7d-0e5fb8fc6915
-    m_ActionName: Player/UpKeys[/Keyboard/w,/Keyboard/upArrow]
+    m_ActionName: 'Player/UpKeys[/Keyboard/w,/Keyboard/upArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3462,7 +3471,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 77952b63-4d86-477a-a3b1-04aefac099fb
-    m_ActionName: Player/DownKeys[/Keyboard/s,/Keyboard/downArrow]
+    m_ActionName: 'Player/DownKeys[/Keyboard/s,/Keyboard/downArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3478,7 +3487,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: d6ba1b29-e6b0-411b-ac15-02f6b24d735b
-    m_ActionName: Player/LeftKeys[/Keyboard/a,/Keyboard/leftArrow]
+    m_ActionName: 'Player/LeftKeys[/Keyboard/a,/Keyboard/leftArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3494,11 +3503,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 1a7fff33-21a2-4ef3-8df8-b414d64ababd
-    m_ActionName: Player/RightKeys[/Keyboard/d,/Keyboard/rightArrow]
+    m_ActionName: 'Player/RightKeys[/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 89bb4061-0c76-4918-bcd8-da4306a61506
-    m_ActionName: Player/TutorialProceed[/Keyboard/space]
+    m_ActionName: 'Player/TutorialProceed[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -3760,6 +3769,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: eb6d173e2a06807419e9e00aa7d0b5f6, type: 3}
   judgeTextImage: {fileID: 338394367}
   speechBubble: {fileID: 1733070492}
+  transparentSprite: {fileID: -3264634609718136374, guid: c345bcd34bf834c408d5adeee23c02e6, type: 3}
   animationDuration: 0.3
 --- !u!1 &1733070490
 GameObject:
