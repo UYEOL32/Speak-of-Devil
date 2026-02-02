@@ -750,7 +750,7 @@ MonoBehaviour:
   - {fileID: 1408572141}
   timingBoxes: []
   noteSpeed: 0
-  bpm: 120
+  bpm: 100
   maxNoteInScreen: 5
   intervalTime: 0
   startPos: {x: 9, y: 2, z: 0}
@@ -795,7 +795,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 4f99db5a245714a268fe92b5621ab2b6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

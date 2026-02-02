@@ -90,6 +90,7 @@ public class NoteManager : Singleton<NoteManager>
                 bool wasPaused = tutorialMode < 0;
                 tutorialMode = nextTutorialMode;
                 chatAvailable = false;
+                tutorialText.text = "";
                 if (wasPaused)
                 {
                     ScheduleTutorialStart(4);
@@ -105,6 +106,7 @@ public class NoteManager : Singleton<NoteManager>
             }
             else
             {
+                tutorialText.text = "";
                 Debug.Log("튜토리얼은 끝!입니다~");
             }
         }
@@ -290,7 +292,7 @@ public class NoteManager : Singleton<NoteManager>
     }
     public void CheckJudgeType(JudgeType judgeType)
     {
-        GameManager.Instance.HpCheck(judgeType);
+        if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
         print(judgeType);
     }
 

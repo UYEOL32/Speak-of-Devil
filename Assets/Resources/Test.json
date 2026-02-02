@@ -1,8 +1,8 @@
 {
     "songId": "song2",
     "version": 1,
-    "bpm": 129.0,
-    "snapOffsetMs": 500,
+    "bpm": 100.0,
+    "snapOffsetMs": 200,
     "events": [
         {
             "timeMs": 10452,
