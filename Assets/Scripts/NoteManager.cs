@@ -43,6 +43,15 @@ public class NoteManager : Singleton<NoteManager>
     public string songId = "song1";
     public List<SongEntry> songEntries = new List<SongEntry>();
 
+    [Header("BOSS ANIM")]
+    public UnitAnimator bossUnitAnimator;
+    public bool debugBossAnim = false;
+    public int bossIdleLockBeats = 2;
+
+    [Header("PLAYER ANIM")]
+    public UnitAnimator playerUnitAnimator;
+    public bool debugPlayerAnim = false;
+
     [Header("TUTORIAL")]
     public bool isTutorial = false;
     public int tutorialRestBeats = 4;
@@ -70,6 +79,7 @@ public class NoteManager : Singleton<NoteManager>
     private readonly Dictionary<int, TutorialCycleState> tutorialCycles = new Dictionary<int, TutorialCycleState>();
     private int tutorialStartBeat = 0;
     private int nextTutorialWarnBeatIndex = -1;
+    private int bossIdleLockRemaining = 0;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
@@ -159,6 +169,7 @@ public class NoteManager : Singleton<NoteManager>
         tutorialCycles.Clear();
         tutorialStartBeat = 0;
         nextTutorialWarnBeatIndex = -1;
+        bossIdleLockRemaining = 0;
         SchedulePlayback();
         
         notePositions.Clear();
@@ -270,14 +281,18 @@ public class NoteManager : Singleton<NoteManager>
 
         Note targetNote = judgeNote.noteVisual.GetComponent<Note>();
         if (targetNote == null) return;
+
+        if (timingBoxes == null || timingBoxes.Length == 0) return;
+        float pos = judgeObject.transform.localPosition.x;
+        Vector2 outer = timingBoxes[timingBoxes.Length - 1];
+        if (pos < outer.x || pos > outer.y) return;
+
         if (targetNote.noteType != noteType)
         {
             CheckJudgeType(JudgeType.Miss);
             RemoveFrontNote(JudgeType.Miss);
             return;
         }
-
-        float pos = judgeObject.transform.localPosition.x;
         for (int x = 0; x < timingBoxes.Length; x++)
         {
             if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
@@ -399,6 +414,7 @@ public class NoteManager : Singleton<NoteManager>
                     sfxAudioSource.PlayOneShot(devilWarning[evt.action]);
                 }
                 Debug.Log($"[4Beat][Spawn] Incoming {((NoteType)evt.action)}");
+                SetBossAnimationIndex((NoteType)evt.action);
                 nextFourBeatIndex++;
             }
 
@@ -445,6 +461,10 @@ public class NoteManager : Singleton<NoteManager>
             lastBeatIndex = beatIndex;
             UIManager.Instance.CallBeatEffect();
             OnEveryBeat?.Invoke();
+            if (bossIdleLockRemaining > 0)
+            {
+                bossIdleLockRemaining--;
+            }
             currentTime -= intervalTime;
         }
     }
@@ -563,6 +583,8 @@ public class NoteManager : Singleton<NoteManager>
         if (tutorialMode < 0) return;
         if (tutorialRestBeats < 0 || tutorialSpawnBeats <= 0) return;
 
+        SetBossAnimationIndex(null);
+
         if (nextTutorialWarnBeatIndex < 0)
         {
             nextTutorialWarnBeatIndex = GetFirstTutorialSpawnBeatIndex();
@@ -584,6 +606,7 @@ public class NoteManager : Singleton<NoteManager>
                 {
                     sfxAudioSource.PlayOneShot(devilWarning[(int)upcoming]);
                 }
+                SetBossAnimationIndex(upcoming);
             }
 
             nextTutorialWarnBeatIndex = GetNextTutorialSpawnBeatIndex(nextTutorialWarnBeatIndex);
@@ -727,6 +750,8 @@ public class NoteManager : Singleton<NoteManager>
         int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
         if (beatIndex == lastChartFourBeatIndex) return;
 
+        SetBossAnimationIndex(null);
+
         int warnBeat = beatIndex + 4 - leadBeats;
         double warnTimeMs = (warnBeat * beatIntervalMs) - debugFourBeatOffsetMs;
         double targetEventTimeMs = warnTimeMs + chart.snapOffsetMs;
@@ -740,9 +765,49 @@ public class NoteManager : Singleton<NoteManager>
             {
                 sfxAudioSource.PlayOneShot(devilWarning[chart.events[idx].action]);
             }
+            SetBossAnimationIndex((NoteType)chart.events[idx].action);
         }
 
         lastChartFourBeatIndex = beatIndex;
+    }
+
+    private void SetBossAnimationIndex(NoteType? noteType)
+    {
+        if (bossUnitAnimator == null) return;
+
+        int index = 0;
+        if (noteType.HasValue)
+        {
+            index = ((int)noteType.Value) + 1;
+            bossIdleLockRemaining = Mathf.Max(0, bossIdleLockBeats);
+        }
+        else
+        {
+            if (bossIdleLockRemaining > 0) return;
+        }
+        if (debugBossAnim)
+        {
+            Debug.Log($"[BossAnim] noteType={(noteType.HasValue ? noteType.Value.ToString() : "None")} index={index}");
+        }
+        bossUnitAnimator.SetAnimationIndex(index);
+        if (noteType.HasValue)
+        {
+            bossUnitAnimator.PlayAnimation();
+        }
+    }
+
+    public void TriggerPlayerAnimation(NoteType noteType)
+    {
+        if (GameManager.Instance.gameState != GameState.Playing) return;
+        if (playerUnitAnimator == null) return;
+
+        int index = ((int)noteType) + 1;
+        if (debugPlayerAnim)
+        {
+            Debug.Log($"[PlayerAnim] noteType={noteType} index={index}");
+        }
+        playerUnitAnimator.SetAnimationIndex(index);
+        playerUnitAnimator.PlayAnimation();
     }
 
     private class TutorialCycleState
