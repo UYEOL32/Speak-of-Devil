@@ -20,8 +20,7 @@ public class GameManager : SingletonPersistence<GameManager>
         {
             gameState = GameState.Playing;
             hp = maxHp;
-            NoteManager.Instance.Setting();
-            UIManager.Instance.UIReset();
+            StartCoroutine(DelayedStageSetup());
         }
     }
 
@@ -36,10 +35,7 @@ public class GameManager : SingletonPersistence<GameManager>
                 if(SceneManager.GetActiveScene().name != "Stage") SceneManager.LoadScene("Stage");
 
                 hp = maxHp;
-
-
-                NoteManager.Instance.Setting();
-                UIManager.Instance.UIReset();
+                StartCoroutine(DelayedStageSetup());
                 break;
             case GameState.Title:
                 SceneManager.LoadScene("Title");
@@ -51,6 +47,13 @@ public class GameManager : SingletonPersistence<GameManager>
                 break;
         }
         OnGameStateChange?.Invoke();
+    }
+
+    private System.Collections.IEnumerator DelayedStageSetup()
+    {
+        yield return null;
+        NoteManager.Instance.Setting();
+        UIManager.Instance.UIReset();
     }
 
     public void HpCheck(JudgeType judgeType)
