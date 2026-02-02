@@ -281,14 +281,18 @@ public class NoteManager : Singleton<NoteManager>
 
         Note targetNote = judgeNote.noteVisual.GetComponent<Note>();
         if (targetNote == null) return;
+
+        if (timingBoxes == null || timingBoxes.Length == 0) return;
+        float pos = judgeObject.transform.localPosition.x;
+        Vector2 outer = timingBoxes[timingBoxes.Length - 1];
+        if (pos < outer.x || pos > outer.y) return;
+
         if (targetNote.noteType != noteType)
         {
             CheckJudgeType(JudgeType.Miss);
             RemoveFrontNote(JudgeType.Miss);
             return;
         }
-
-        float pos = judgeObject.transform.localPosition.x;
         for (int x = 0; x < timingBoxes.Length; x++)
         {
             if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
