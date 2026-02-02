@@ -599,6 +599,7 @@ public class NoteManager : Singleton<NoteManager>
                     break;
                 case 7:
                     Debug.Log("[Event] Out");
+                    BreakDownEnd();
                     break;
                 default:
                     Debug.Log($"[Event] action={evt.action}");

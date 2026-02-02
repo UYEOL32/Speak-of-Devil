@@ -2,178 +2,106 @@
     "songId": "song2",
     "version": 1,
     "bpm": 120.0,
-    "snapOffsetMs": 150,
+    "snapOffsetMs": 0,
     "events": [
         {
-            "timeMs": 14550,
+            "timeMs": 10650,
             "action": 1
         },
         {
-            "timeMs": 15050,
-            "action": 3
-        },
-        {
-            "timeMs": 15550,
-            "action": 0
-        },
-        {
-            "timeMs": 16050,
+            "timeMs": 11150,
             "action": 1
         },
         {
-            "timeMs": 18550,
+            "timeMs": 11650,
             "action": 1
         },
         {
-            "timeMs": 19050,
+            "timeMs": 12150,
             "action": 1
         },
         {
-            "timeMs": 19550,
+            "timeMs": 14650,
             "action": 1
         },
         {
-            "timeMs": 20050,
+            "timeMs": 15150,
             "action": 1
         },
         {
-            "timeMs": 22550,
-            "action": 2
-        },
-        {
-            "timeMs": 23050,
-            "action": 2
-        },
-        {
-            "timeMs": 23550,
+            "timeMs": 15650,
             "action": 5
         },
         {
-            "timeMs": 24050,
+            "timeMs": 16150,
             "action": 6
         },
         {
-            "timeMs": 26800,
+            "timeMs": 18650,
             "action": 1
         },
         {
-            "timeMs": 27050,
+            "timeMs": 18900,
             "action": 1
         },
         {
-            "timeMs": 27300,
+            "timeMs": 19150,
             "action": 1
         },
         {
-            "timeMs": 27550,
+            "timeMs": 19400,
             "action": 1
         },
         {
-            "timeMs": 27800,
+            "timeMs": 19650,
             "action": 1
         },
         {
-            "timeMs": 28300,
+            "timeMs": 19900,
             "action": 1
         },
         {
-            "timeMs": 30550,
-            "action": 2
-        },
-        {
-            "timeMs": 31050,
-            "action": 2
-        },
-        {
-            "timeMs": 31300,
-            "action": 2
-        },
-        {
-            "timeMs": 31550,
-            "action": 2
-        },
-        {
-            "timeMs": 31800,
-            "action": 2
-        },
-        {
-            "timeMs": 32300,
-            "action": 2
-        },
-        {
-            "timeMs": 32550,
-            "action": 2
-        },
-        {
-            "timeMs": 34550,
-            "action": 0
-        },
-        {
-            "timeMs": 35050,
+            "timeMs": 20150,
             "action": 1
         },
         {
-            "timeMs": 35550,
-            "action": 3
+            "timeMs": 20400,
+            "action": 1
         },
         {
-            "timeMs": 36050,
+            "timeMs": 22650,
             "action": 2
         },
         {
-            "timeMs": 38550,
-            "action": 3
-        },
-        {
-            "timeMs": 39050,
+            "timeMs": 22900,
             "action": 2
         },
         {
-            "timeMs": 39550,
-            "action": 0
+            "timeMs": 23150,
+            "action": 2
         },
         {
-            "timeMs": 40300,
+            "timeMs": 23400,
+            "action": 2
+        },
+        {
+            "timeMs": 23650,
+            "action": 2
+        },
+        {
+            "timeMs": 23900,
+            "action": 2
+        },
+        {
+            "timeMs": 24150,
+            "action": 2
+        },
+        {
+            "timeMs": 24400,
             "action": 7
         },
         {
-            "timeMs": 42050,
-            "action": 1
-        },
-        {
-            "timeMs": 44300,
-            "action": 1
-        },
-        {
-            "timeMs": 46300,
-            "action": 2
-        },
-        {
-            "timeMs": 48300,
-            "action": 2
-        },
-        {
-            "timeMs": 50300,
-            "action": 0
-        },
-        {
-            "timeMs": 52300,
-            "action": 3
-        },
-        {
-            "timeMs": 54800,
-            "action": 0
-        },
-        {
-            "timeMs": 55050,
-            "action": 2
-        },
-        {
-            "timeMs": 55800,
-            "action": 3
-        },
-        {
-            "timeMs": 56300,
+            "timeMs": 27650,
             "action": 1
         }
     ]

@@ -1827,12 +1827,25 @@ MonoBehaviour:
   leadBeats: 5
   debugLeadBeat: 0
   debugFourBeat: 1
-  debugFourBeatOffsetMs: 100
+  debugFourBeatOffsetMs: 200
+  debugEveryFourBeats: 1
   useSongId: 1
-  songId: song1
-  songEntries: [{songId: Hellfire On Sahara, chartResourceName: song1, audioClip: {fileID: 0}},
-    {songId: Knocking On Hell's Door, chartResourceName: song2, audioClip: {fileID: 0}},
-    {songId: Rip Out Devil's Heart, chartResourceName: song3, audioClip: {fileID: 0}}]
+  songId: Knocking On Hell's Door
+  songEntries:
+  - songId: Hellfire On Sahara
+    chartResourceName: song1
+    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+  - songId: Knocking On Hell's Door
+    chartResourceName: song2
+    audioClip: {fileID: 8300000, guid: c428ed643faf04d2da4fde2582f33ac9, type: 3}
+  - songId: Rip Out Devil's Heart
+    chartResourceName: song3
+    audioClip: {fileID: 8300000, guid: caaf892f59e0648b285f45d0575c6ce2, type: 3}
+  bossUnitAnimator: {fileID: 535513534}
+  debugBossAnim: 0
+  bossIdleLockBeats: 2
+  playerUnitAnimator: {fileID: 404831205}
+  debugPlayerAnim: 0
   isTutorial: 0
   tutorialRestBeats: 4
   tutorialSpawnBeats: 4
