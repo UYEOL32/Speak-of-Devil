@@ -23,6 +23,8 @@ public class NoteManager : Singleton<NoteManager>
 
     [Header("AUDIO SOURCE AND...!!")] public AudioSource audioSource;
     public AudioSource sfxAudioSource;
+    public AudioClip[] inputSfxClips = new AudioClip[4];
+    public AudioClip goodOrBetterSfx;
     public double startDelaySec = 0.1d;
     public TMP_Text dspTime;
     
@@ -394,6 +396,10 @@ public class NoteManager : Singleton<NoteManager>
     public void CheckJudgeType(JudgeType judgeType, NoteType noteType)
     {
         if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
+        if (judgeType <= JudgeType.Good && sfxAudioSource != null && goodOrBetterSfx != null)
+        {
+            sfxAudioSource.PlayOneShot(goodOrBetterSfx);
+        }
         
         UIManager.Instance.ChangeJudgeIconAndJudgeText(judgeType, noteType);
     }
@@ -855,6 +861,16 @@ public class NoteManager : Singleton<NoteManager>
         }
         playerUnitAnimator.SetAnimationIndex(index);
         playerUnitAnimator.PlayAnimation();
+    }
+
+    public void PlayInputSfx(NoteType noteType)
+    {
+        if (sfxAudioSource == null) return;
+        int index = (int)noteType;
+        if (inputSfxClips == null || index < 0 || index >= inputSfxClips.Length) return;
+        AudioClip clip = inputSfxClips[index];
+        if (clip == null) return;
+        sfxAudioSource.PlayOneShot(clip);
     }
 
     private class TutorialCycleState

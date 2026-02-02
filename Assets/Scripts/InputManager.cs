@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
         
         NoteManager.Instance.CheckTiming(NoteType.Up);
         NoteManager.Instance.TriggerPlayerAnimation(NoteType.Up);
+        NoteManager.Instance.PlayInputSfx(NoteType.Up);
     }
     public void PressDown(InputAction.CallbackContext context)
     {
@@ -18,6 +19,7 @@ public class InputManager : MonoBehaviour
         
         NoteManager.Instance.CheckTiming(NoteType.Down);
         NoteManager.Instance.TriggerPlayerAnimation(NoteType.Down);
+        NoteManager.Instance.PlayInputSfx(NoteType.Down);
     }
     public void PressLeft(InputAction.CallbackContext context)
     {
@@ -26,6 +28,7 @@ public class InputManager : MonoBehaviour
         
         NoteManager.Instance.CheckTiming(NoteType.Left);
         NoteManager.Instance.TriggerPlayerAnimation(NoteType.Left);
+        NoteManager.Instance.PlayInputSfx(NoteType.Left);
     }
     public void PressRight(InputAction.CallbackContext context)
     {
@@ -34,6 +37,7 @@ public class InputManager : MonoBehaviour
         
         NoteManager.Instance.CheckTiming(NoteType.Right);
         NoteManager.Instance.TriggerPlayerAnimation(NoteType.Right);
+        NoteManager.Instance.PlayInputSfx(NoteType.Right);
     }
     public void TutorialProceed(InputAction.CallbackContext context)
     {
