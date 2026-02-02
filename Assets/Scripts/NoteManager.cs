@@ -289,7 +289,7 @@ public class NoteManager : Singleton<NoteManager>
 
         if (targetNote.noteType != noteType)
         {
-            CheckJudgeType(JudgeType.Miss);
+            CheckJudgeType(JudgeType.Miss,noteType);
             RemoveFrontNote(JudgeType.Miss);
             return;
         }
@@ -298,7 +298,7 @@ public class NoteManager : Singleton<NoteManager>
             if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
             {
                 
-                CheckJudgeType((JudgeType)x);
+                CheckJudgeType((JudgeType)x, noteType);
                 RemoveFrontNote((JudgeType)x);
                 break;
             }
@@ -317,6 +317,7 @@ public class NoteManager : Singleton<NoteManager>
             noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen, inBeatOffset/((float)intervalTime*1000));
         }
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen,-8,0), Quaternion.identity);
+        judgeNote.GetComponent<JudgeNote>().noteType = noteType;
         note.transform.SetParent(transform);
         
         judgeNote.GetComponent<JudgeNote>().noteVisual = note;
@@ -349,11 +350,11 @@ public class NoteManager : Singleton<NoteManager>
             Destroy(judgeNote);
         }
     }
-    public void CheckJudgeType(JudgeType judgeType)
+    public void CheckJudgeType(JudgeType judgeType, NoteType noteType)
     {
         if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
-        // judgeEffect.color = colors[(int)judgeType];
-        print(judgeType);
+        
+        UIManager.Instance.ChangeJudgeIconAndJudgeText(judgeType, noteType);
     }
 
     private void LoadChart()

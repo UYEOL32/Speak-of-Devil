@@ -15,11 +15,6 @@ public class Note : MonoBehaviour
     private int maxNoteInScreen;
     private Coroutine moveRoutine;
 
-    public void Awake()
-    {
-        noteType = NoteType.Up;
-    }
-
     public void InitMove(List<Vector3> path, double interval, int max, float offsetRate)
     {
 

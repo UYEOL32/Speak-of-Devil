@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-
+using AYellowpaper.SerializedCollections;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -15,7 +16,13 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Button restartButton;
     [SerializeField] Button exitButton;
     [SerializeField] GameObject hpBarObject;
-
+    
+    [SerializeField] List<JudgementIcon> judgeIcons = new List<JudgementIcon>();
+    [SerializeField] Image arrowImage;
+    [SerializeField] List<Sprite> judgeTexts = new List<Sprite>();
+    [SerializeField] Image judgeTextImage;
+    [SerializeField] Image speechBubble;
+    
     [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
     
@@ -24,9 +31,13 @@ public class UIManager : Singleton<UIManager>
         beatEffect?.SetActive(false);
         restartButton?.gameObject.SetActive(false);
         exitButton?.gameObject.SetActive(false);
+        arrowImage?.gameObject.SetActive(true);
+        judgeTextImage?.gameObject.SetActive(true);
+        speechBubble?.gameObject.SetActive(true);
         gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
         gameOverEffect.anchoredPosition = new Vector2(0, 1080);
         hpBarObject.GetComponent<HPVisualController>().GenerateHpVisual();
+        
     }
 
     public void CallBeatEffect()
@@ -65,6 +76,9 @@ public class UIManager : Singleton<UIManager>
 
     public void GameOverEffect()
     {
+        arrowImage.gameObject.SetActive(false);
+        judgeTextImage.gameObject.SetActive(false);
+        speechBubble.gameObject.SetActive(false);
         Vector2 targetPos = new Vector2(0, 0);
         gameOverEffect.anchoredPosition = new Vector2(0,1080);
         
@@ -88,4 +102,16 @@ public class UIManager : Singleton<UIManager>
     {
         GameManager.Instance.UpdateGameState(GameState.Playing);
     }
+
+    public void ChangeJudgeIconAndJudgeText(JudgeType judgeType, NoteType noteType)
+    {
+        arrowImage.sprite = judgeIcons[(int)noteType].judgementSprites[(int)judgeType];
+        judgeTextImage.sprite = judgeTexts[(int)judgeType];
+    }
+}
+
+[Serializable]
+public class JudgementIcon
+{
+    public List<Sprite> judgementSprites;
 }
