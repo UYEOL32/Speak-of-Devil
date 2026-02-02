@@ -1,0 +1,104 @@
+{
+    "songId": "song1",
+    "version": 1,
+    "bpm": 120.0,
+    "snapOffsetMs": 200,
+    "events": [
+        {
+            "timeMs": 10700,
+            "action": 0
+        },
+        {
+            "timeMs": 11200,
+            "action": 1
+        },
+        {
+            "timeMs": 11700,
+            "action": 3
+        },
+        {
+            "timeMs": 12200,
+            "action": 2
+        },
+        {
+            "timeMs": 14700,
+            "action": 1
+        },
+        {
+            "timeMs": 15200,
+            "action": 3
+        },
+        {
+            "timeMs": 15700,
+            "action": 2
+        },
+        {
+            "timeMs": 16200,
+            "action": 0
+        },
+        {
+            "timeMs": 18700,
+            "action": 1
+        },
+        {
+            "timeMs": 19200,
+            "action": 1
+        },
+        {
+            "timeMs": 19700,
+            "action": 1
+        },
+        {
+            "timeMs": 20200,
+            "action": 1
+        },
+        {
+            "timeMs": 22700,
+            "action": 2
+        },
+        {
+            "timeMs": 23200,
+            "action": 2
+        },
+        {
+            "timeMs": 23700,
+            "action": 2
+        },
+        {
+            "timeMs": 24200,
+            "action": 2
+        },
+        {
+            "timeMs": 26700,
+            "action": 3
+        },
+        {
+            "timeMs": 27200,
+            "action": 3
+        },
+        {
+            "timeMs": 27700,
+            "action": 3
+        },
+        {
+            "timeMs": 28200,
+            "action": 3
+        },
+        {
+            "timeMs": 30700,
+            "action": 0
+        },
+        {
+            "timeMs": 31200,
+            "action": 0
+        },
+        {
+            "timeMs": 31700,
+            "action": 0
+        },
+        {
+            "timeMs": 32200,
+            "action": 0
+        }
+    ]
+}
