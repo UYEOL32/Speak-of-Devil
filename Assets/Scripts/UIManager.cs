@@ -1,17 +1,39 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
+
 
 public class UIManager : Singleton<UIManager>
 {
-    public GameObject beatEffect;
+    [Header("UI Elements")]
+    [SerializeField] GameObject beatEffect;
+    [SerializeField] Slider hpBar;
+    [SerializeField] RectTransform gameOverEffect;
+    [SerializeField] TextMeshProUGUI gameOverText;
+
+    [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    void UIReset()
+    {
         beatEffect.SetActive(false);
+        gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
+        gameOverEffect.anchoredPosition = new Vector2(0, 1080);
+        hpBar.maxValue = GameManager.Instance.maxHp;
+        hpBar.value = hpBar.maxValue;
     }
     
+    void Start()
+    {
+        UIReset();
+    }
 
     public void CallBeatEffect()
     {
@@ -38,5 +60,25 @@ public class UIManager : Singleton<UIManager>
 
         renderer.SetAlpha(0f);
         beatEffect.SetActive(false);
+    }
+    
+    public void TakeDamage(float currHp)
+    {
+        currHp = Mathf.Clamp(currHp, 0, hpBar.maxValue);
+        
+        // Slider value를 부드럽게 애니메이션
+        hpBar.DOValue(currHp, animationDuration).SetEase(Ease.OutExpo);
+    }
+
+    public void GameOverEffect()
+    {
+        Vector2 targetPos = new Vector2(0, 0);
+        gameOverEffect.anchoredPosition = new Vector2(0,1080);
+        
+        gameOverEffect.DOAnchorPos(targetPos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() => 
+        {
+            gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
+            gameOverText.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
+        });
     }
 }

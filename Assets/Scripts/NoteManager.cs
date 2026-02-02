@@ -83,7 +83,7 @@ public class NoteManager : Singleton<NoteManager>
     }
     void Update()
     {
-        dspTime.text = AudioSettings.dspTime.ToString("0.00");
+        // dspTime.text = AudioSettings.dspTime.ToString("0.00");
         if (GameManager.Instance.gameState == GameState.Playing)
         {
             if (!isPlaybackScheduled) return;
