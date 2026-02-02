@@ -152,6 +152,8 @@ public class NoteManager : Singleton<NoteManager>
         {
             ResolveSongById();
         }
+
+        dailyVolume.profile.TryGet(out chrAbre);
         ResetBreakDownMode();
         ClearAllNotes();
         LoadChart();
@@ -188,6 +190,8 @@ public class NoteManager : Singleton<NoteManager>
         bossIdleLockRemaining = 0;
         pendingStartLogs.Clear();
         SchedulePlayback();
+
+        OnEveryBeat += ChrBeat;
         
         notePositions.Clear();
         xDelta = (startPos.x - endPos.x)/maxNoteInScreen;
@@ -217,6 +221,8 @@ public class NoteManager : Singleton<NoteManager>
             Destroy(note);
         }
         notes.Clear();
+        
+        OnEveryBeat -= ChrBeat;
 
         while (judgeNoteQueue.Count > 0)
         {
@@ -389,12 +395,51 @@ public class NoteManager : Singleton<NoteManager>
     public SpriteRenderer judgeEffect;
     public Color[] colors;
 
+    public Volume dailyVolume;
+    public ChromaticAberration chrAbre;
+    public float chrAbreIntesity;
+
+    Tween chrBeatTween;
+
+    public void ChrBeat()
+    {
+        chrBeatTween?.Kill();   // ← 이전 것 종료
+
+        chrAbre.intensity.value = chrAbreIntesity;
+
+        chrBeatTween = DOTween.To(
+                () => chrAbre.intensity.value,
+                x => chrAbre.intensity.value = x,
+                0f,
+                (float)intervalTime
+            )
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true); // 리듬겜이면 추천
+    }
+
     private Transform GetHitTarget(NoteType noteType)
     {
         if (hitTargets == null) return null;
         int index = (int)noteType;
         if (index < 0 || index >= hitTargets.Length) return null;
         return hitTargets[index];
+    }
+
+    private NoteType MapActionToNoteType(int action)
+    {
+        switch (action)
+        {
+            case 0:
+                return NoteType.Right;
+            case 1:
+                return NoteType.Up;
+            case 2:
+                return NoteType.Down;
+            case 3:
+                return NoteType.Left;
+            default:
+                return NoteType.Up;
+        }
     }
 
     public void CheckTiming(NoteType noteType)
@@ -618,15 +663,16 @@ public class NoteManager : Singleton<NoteManager>
                     nextFourBeatIndex++;
                     continue;
                 }
+                NoteType noteType = MapActionToNoteType(evt.action);
                 double logTimeMs = evt.timeMs - (fourBeatMs + debugFourBeatOffsetMs);
                 if (currentMs < logTimeMs) break;
 
                 if (sfxAudioSource != null)
                 {
-                    sfxAudioSource.PlayOneShot(devilWarning[evt.action]);
+                    sfxAudioSource.PlayOneShot(devilWarning[(int)noteType]);
                 }
-                Debug.Log($"[4Beat][Spawn] Incoming {((NoteType)evt.action)}");
-                SetBossAnimationIndex((NoteType)evt.action);
+                Debug.Log($"[4Beat][Spawn] Incoming {noteType}");
+                SetBossAnimationIndex(noteType);
                 nextFourBeatIndex++;
             }
 
@@ -641,15 +687,16 @@ public class NoteManager : Singleton<NoteManager>
                 nextEventIndex++;
                 continue;
             }
+            NoteType noteType = MapActionToNoteType(evt.action);
             double spawnTimeMs = evt.timeMs - leadTimeMs;
             if (currentMs < spawnTimeMs) break;
 
             if (debugLeadBeat)
             {
                 double remainingMs = evt.timeMs - currentMs;
-                Debug.Log($"[LeadBeat] Spawn {((NoteType)evt.action)} | remaining {remainingMs:F0}ms");
+                Debug.Log($"[LeadBeat] Spawn {noteType} | remaining {remainingMs:F0}ms");
             }
-            GenerateNote((NoteType)evt.action, ((int)(currentMs - chart.snapOffsetMs) % (int)(intervalTime * 1000)));
+            GenerateNote(noteType, ((int)(currentMs - chart.snapOffsetMs) % (int)(intervalTime * 1000)));
             nextEventIndex++;
         }
     }
@@ -983,12 +1030,13 @@ public class NoteManager : Singleton<NoteManager>
         while (idx < chart.events.Count && chart.events[idx].timeMs == targetEventTimeMs && chart.events[idx].action >= 4) idx++;
         if (idx < chart.events.Count && chart.events[idx].action < 4 && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
         {
-            Debug.Log($"[4Beat] Incoming {((NoteType)chart.events[idx].action)}");
+            NoteType noteType = MapActionToNoteType(chart.events[idx].action);
+            Debug.Log($"[4Beat] Incoming {noteType}");
             if (sfxAudioSource != null)
             {
-                sfxAudioSource.PlayOneShot(devilWarning[chart.events[idx].action]);
+                sfxAudioSource.PlayOneShot(devilWarning[(int)noteType]);
             }
-            SetBossAnimationIndex((NoteType)chart.events[idx].action);
+            SetBossAnimationIndex(noteType);
         }
 
         lastChartFourBeatIndex = beatIndex;
