@@ -9,7 +9,7 @@ public class NoteManager : Singleton<NoteManager>
     public Transform center = null;
     public GameObject[] timingRect = null;
     public Vector2[] timingBoxes;
-    List<GameObject> judgeNoteList = new List<GameObject>();
+    private readonly Queue<GameObject> judgeNoteQueue = new Queue<GameObject>();
     public double noteSpeed;    
     public int bpm;
     public int maxNoteInScreen;
@@ -19,30 +19,118 @@ public class NoteManager : Singleton<NoteManager>
     private float xDelta;
     private float yDelta;
 
+    public AudioClip[] devilWarning;
+
     [Header("AUDIO SOURCE AND...!!")] public AudioSource audioSource;
+    public AudioSource sfxAudioSource;
     public double startDelaySec = 0.1d;
     public TMP_Text dspTime;
     
     private double currentTime = 0d;
-    List<GameObject> notes = new List<GameObject>();
+    private readonly List<GameObject> notes = new List<GameObject>();
     public GameObject notePrefab;
     public GameObject judgeNotePrefab;
 
     [Header("CHART")]
     public string chartResourceName = "Test";
-    public float leadBeats = 5f;
+    public int leadBeats = 5;
+    public bool debugLeadBeat = false;
+    public bool debugFourBeat = false;
+    public int debugFourBeatOffsetMs = 0;
+
+    [Header("SONG MAPPING")]
+    public bool useSongId = true;
+    public string songId = "song1";
+    public List<SongEntry> songEntries = new List<SongEntry>();
+
+    [Header("TUTORIAL")]
+    public bool isTutorial = false;
+    public int tutorialRestBeats = 4;
+    public int tutorialSpawnBeats = 4;
+    public int tutorialMode = 0;
+    public int tutorialMaxMode = 2;
+    public int tutorialSuccessesToAdvance = 3;
+    public NoteType[] tutorialPattern;
+    
+    List<GameObject> judgeNoteList = new List<GameObject>();
     
     private List<Vector3> notePositions = new List<Vector3>();
     private NoteChart chart;
     private int nextEventIndex = 0;
+    private int nextFourBeatIndex = 0;
     private float leadTimeMs;
+    private float fourBeatMs;
+    private int lastBeatIndex = -1;
+    private int lastTutorialBeatIndex = -1;
+    private int tutorialPatternIndex = 0;
+    private int lastTutorialFourBeatIndex = -1;
+    private int lastChartFourBeatIndex = -1;
+    private int currentTutorialCycleId = -1;
+    private int tutorialSuccessCount = 0;
+    private readonly Dictionary<int, TutorialCycleState> tutorialCycles = new Dictionary<int, TutorialCycleState>();
+    private int tutorialStartBeat = 0;
+    private int nextTutorialWarnBeatIndex = -1;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
     public Action OnEveryBeat;
+    public TMP_Text tutorialText;
+    public bool chatAvailable;
+
+    public int nextTutorialMode;
+
+    public int[] tutorialDialogIndex;
+    public string[] tutorialDialog;
+
+    public int currentDialogIndex = -1;
+    
+    public void ProceedTutorial()
+    {
+        if (!chatAvailable) return;
+
+        if (nextTutorialMode < tutorialDialogIndex.Length)
+        {
+            if (currentDialogIndex < tutorialDialogIndex[nextTutorialMode] - 1)
+            {
+                currentDialogIndex++;
+                tutorialText.text = tutorialDialog[currentDialogIndex];
+            }
+            else
+            {
+                bool wasPaused = tutorialMode < 0;
+                tutorialMode = nextTutorialMode;
+                chatAvailable = false;
+                tutorialText.text = "";
+                if (wasPaused)
+                {
+                    ScheduleTutorialStart(4);
+                }
+            }
+        }
+        else
+        {
+            if (currentDialogIndex < tutorialDialog.Length - 1)
+            {
+                currentDialogIndex++;
+                tutorialText.text = tutorialDialog[currentDialogIndex];
+            }
+            else
+            {
+                tutorialText.text = "";
+                Debug.Log("튜토리얼은 끝!입니다~");
+            }
+        }
+        
+    }
+
     public void Setting()
     {
+        if (useSongId)
+        {
+            ResolveSongById();
+        }
         LoadChart();
+        ProceedTutorial();
         if (bpm <= 0)
         {
             Debug.LogError("BPM must be greater than 0.");
@@ -56,8 +144,20 @@ public class NoteManager : Singleton<NoteManager>
         intervalTime = 60d / bpm;
         noteSpeed = bpm / 60d;
         leadTimeMs = leadBeats * (60000f / bpm);
+        fourBeatMs = 4f * (60000f / bpm);
         currentTime = 0d;
         nextEventIndex = 0;
+        nextFourBeatIndex = 0;
+        lastBeatIndex = -1;
+        lastTutorialBeatIndex = -1;
+        tutorialPatternIndex = 0;
+        lastTutorialFourBeatIndex = -1;
+        lastChartFourBeatIndex = -1;
+        currentTutorialCycleId = -1;
+        tutorialSuccessCount = 0;
+        tutorialCycles.Clear();
+        tutorialStartBeat = 0;
+        nextTutorialWarnBeatIndex = -1;
         SchedulePlayback();
         
         notePositions.Clear();
@@ -91,15 +191,17 @@ public class NoteManager : Singleton<NoteManager>
             if (!isPlaybackScheduled) return;
             if (AudioSettings.dspTime < startDspTime) return;
 
-            double currentMs = GetCurrentTimeMs();
-            SpawnDueNotes(currentMs);
 
-            currentTime += Time.deltaTime;
-
-            if (!(currentTime >= intervalTime)) return;
-            UIManager.Instance.CallBeatEffect();
-            OnEveryBeat?.Invoke();
-            currentTime -= intervalTime;
+            double songTimeMs = GetSongTimeMs();
+            if (isTutorial)
+            {
+                HandleTutorial(songTimeMs);
+            }
+            else
+            {
+                SpawnDueNotes(songTimeMs);
+            }
+            HandleBeatEffect(songTimeMs);
         }
     }
 
@@ -120,7 +222,6 @@ public class NoteManager : Singleton<NoteManager>
 
         // 리스트 정리
         notes.Clear();
-        judgeNoteList.Clear();
         notePositions.Clear();
 
         // 오디오 정리
@@ -132,36 +233,41 @@ public class NoteManager : Singleton<NoteManager>
         // 이벤트 구독 해제
         OnEveryBeat = null;
     }
+    public SpriteRenderer judgeEffect;
+    public Color[] colors;
     public void CheckTiming(NoteType noteType)
     {
-        List<int> toRemoveList = new List<int>();
-        for (int i = 0; i < judgeNoteList.Count; i++)
+        if (judgeNoteQueue.Count == 0) return;
+
+        GameObject judgeObject = judgeNoteQueue.Peek();
+        if (judgeObject == null) return;
+
+        JudgeNote judgeNote = judgeObject.GetComponent<JudgeNote>();
+        if (judgeNote == null || judgeNote.noteVisual == null) return;
+
+        Note targetNote = judgeNote.noteVisual.GetComponent<Note>();
+        if (targetNote == null) return;
+        if (targetNote.noteType != noteType)
         {
-            JudgeNote judgeNote = judgeNoteList[i].GetComponent<JudgeNote>();
-            if (judgeNote == null || judgeNote.noteVisual == null) continue;
-            Note note = judgeNote.noteVisual.GetComponent<Note>();
-            if (note == null || note.noteType != noteType) continue;
+            CheckJudgeType(JudgeType.Miss);
+            RemoveFrontNote(JudgeType.Miss);
+            return;
+        }
 
-            float pos = judgeNoteList[i].transform.localPosition.x;
-
-            for (int x = 0; x < timingBoxes.Length; x++)
+        float pos = judgeObject.transform.localPosition.x;
+        for (int x = 0; x < timingBoxes.Length; x++)
+        {
+            if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
             {
-                if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
-                {
-                    CheckJudgeType((JudgeType)x);
-                    toRemoveList.Add(i);
-                    break;
-                }
+                
+                CheckJudgeType((JudgeType)x);
+                RemoveFrontNote((JudgeType)x);
+                break;
             }
         }
-
-        foreach (int i in toRemoveList)
-        {
-            RemoveNote(judgeNoteList[i]);
-        }
     }
-    
-    void GenerateNote(NoteType noteType)
+
+    void GenerateNote(NoteType noteType, int inBeatOffset, int tutorialCycleId = -1)
     {
         if (notePositions.Count == 0) return;
         GameObject note = Instantiate(notePrefab, notePositions[0], Quaternion.identity);
@@ -169,8 +275,8 @@ public class NoteManager : Singleton<NoteManager>
         if (noteComponent != null)
         {
             noteComponent.noteType = noteType;
-            noteComponent.SetVisualDirection(noteType);
-            noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen);
+            noteComponent.tutorialCycleId = tutorialCycleId;
+            noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen, inBeatOffset/((float)intervalTime*1000));
         }
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen,-8,0), Quaternion.identity);
         note.transform.SetParent(transform);
@@ -178,35 +284,37 @@ public class NoteManager : Singleton<NoteManager>
         judgeNote.GetComponent<JudgeNote>().noteVisual = note;
         
         notes.Add(note);
-        judgeNoteList.Add(judgeNote);
+        judgeNoteQueue.Enqueue(judgeNote);
     }
+    
+    void GenerateNote(NoteType noteType) => GenerateNote(noteType, 0);
 
-    public void RemoveNote(GameObject judgeNote)
+    public void RemoveFrontNote(JudgeType judgeType)
     {
-        if (judgeNote == null) return;
+        if (judgeNoteQueue.Count == 0) return;
 
-        JudgeNote judgeNoteComponent = judgeNote.GetComponent<JudgeNote>();
-        if (judgeNoteComponent == null) return;
-
-        GameObject visualNote = judgeNoteComponent.noteVisual;
-        
-        if (visualNote != null)
+        GameObject judgeNote = judgeNoteQueue.Dequeue();
+        if (judgeNote != null)
         {
-            notes.Remove(visualNote);
-            Note noteComponent = visualNote.GetComponent<Note>();
-            if (noteComponent != null)
+            GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
+            if (visualNote != null)
             {
-                noteComponent.KillTween();
+                notes.Remove(visualNote);
+                Note note = visualNote.GetComponent<Note>();
+                if (note != null)
+                {
+                    HandleTutorialJudge(note, judgeType);
+                    note.KillTween();
+                }
+                Destroy(visualNote);
             }
-            Destroy(visualNote);
+            Destroy(judgeNote);
         }
-        
-        judgeNoteList.Remove(judgeNote);
-        Destroy(judgeNote);
     }
     public void CheckJudgeType(JudgeType judgeType)
     {
-        GameManager.Instance.HpCheck(judgeType);
+        if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
+        // judgeEffect.color = colors[(int)judgeType];
         print(judgeType);
     }
 
@@ -228,9 +336,51 @@ public class NoteManager : Singleton<NoteManager>
         }
     }
 
+    private void ResolveSongById()
+    {
+        if (string.IsNullOrEmpty(songId)) return;
+        for (int i = 0; i < songEntries.Count; i++)
+        {
+            SongEntry entry = songEntries[i];
+            if (entry == null || string.IsNullOrEmpty(entry.songId)) continue;
+            if (entry.songId != songId) continue;
+
+            if (!string.IsNullOrEmpty(entry.chartResourceName))
+            {
+                chartResourceName = entry.chartResourceName;
+            }
+            if (audioSource != null && entry.audioClip != null)
+            {
+                audioSource.clip = entry.audioClip;
+            }
+
+            chart = null;
+            return;
+        }
+    }
+
     private void SpawnDueNotes(double currentMs)
     {
         if (chart == null || chart.events == null || chart.events.Count == 0) return;
+
+        if (debugFourBeat)
+        {
+            while (nextFourBeatIndex < chart.events.Count)
+            {
+                NoteEvent evt = chart.events[nextFourBeatIndex];
+                double logTimeMs = evt.timeMs - (fourBeatMs + debugFourBeatOffsetMs);
+                if (currentMs < logTimeMs) break;
+
+                if (sfxAudioSource != null)
+                {
+                    sfxAudioSource.PlayOneShot(devilWarning[evt.action]);
+                }
+                Debug.Log($"[4Beat][Spawn] Incoming {((NoteType)evt.action)}");
+                nextFourBeatIndex++;
+            }
+
+            LogChartFourBeat(currentMs);
+        }
 
         while (nextEventIndex < chart.events.Count)
         {
@@ -238,12 +388,17 @@ public class NoteManager : Singleton<NoteManager>
             double spawnTimeMs = evt.timeMs - leadTimeMs;
             if (currentMs < spawnTimeMs) break;
 
-            GenerateNote((NoteType)evt.action);
+            if (debugLeadBeat)
+            {
+                double remainingMs = evt.timeMs - currentMs;
+                Debug.Log($"[LeadBeat] Spawn {((NoteType)evt.action)} | remaining {remainingMs:F0}ms");
+            }
+            GenerateNote((NoteType)evt.action, ((int)(currentMs - chart.snapOffsetMs) % (int)(intervalTime * 1000)));
             nextEventIndex++;
         }
     }
 
-    private double GetCurrentTimeMs()
+    private double GetSongTimeMs()
     {
         if (isPlaybackScheduled)
         {
@@ -251,6 +406,328 @@ public class NoteManager : Singleton<NoteManager>
         }
 
         return currentTime * 1000.0;
+    }
+
+    private void HandleBeatEffect(double songTimeMs)
+    {
+        if (chart == null) return;
+
+        double beatTimeMs = songTimeMs - chart.snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (beatIndex > lastBeatIndex)
+        {
+            lastBeatIndex = beatIndex;
+            UIManager.Instance.CallBeatEffect();
+            OnEveryBeat?.Invoke();
+            currentTime -= intervalTime;
+        }
+    }
+
+    private void HandleTutorial(double songTimeMs)
+    {
+        if (tutorialMode < 0) return;
+        if (tutorialRestBeats < 0 || tutorialSpawnBeats <= 0) return;
+
+        int snapOffsetMs = chart != null ? chart.snapOffsetMs : 0;
+        double beatTimeMs = songTimeMs - snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int globalBeatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (globalBeatIndex < tutorialStartBeat) return;
+
+        int beatIndex = globalBeatIndex - tutorialStartBeat;
+        if (beatIndex == lastTutorialBeatIndex) return;
+
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return;
+
+        int cycleId = beatIndex / cycle;
+        if (cycleId != currentTutorialCycleId)
+        {
+            CloseTutorialCycle(currentTutorialCycleId);
+            if (tutorialMode < 0) return;
+            currentTutorialCycleId = cycleId;
+        }
+
+        lastTutorialBeatIndex = beatIndex;
+        if (debugFourBeat)
+        {
+            LogTutorialFourBeat(beatTimeMs, beatIntervalMs);
+        }
+
+        if (!IsTutorialSpawnBeat(beatIndex)) return;
+
+        NoteType type = GetTutorialNoteType(true);
+        GenerateNote(type, 0, cycleId);
+        RegisterTutorialSpawn(cycleId);
+    }
+
+    private bool IsTutorialSpawnBeat(int beatIndex)
+    {
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return false;
+
+        int cyclePos = ((beatIndex % cycle) + cycle) % cycle;
+        if (tutorialMode <= 0)
+        {
+            return cyclePos == tutorialRestBeats;
+        }
+
+        return cyclePos >= tutorialRestBeats;
+    }
+
+    private NoteType GetTutorialNoteType(bool advancePattern)
+    {
+        if (tutorialPattern == null || tutorialPattern.Length == 0) return NoteType.Up;
+
+        if (tutorialMode == 1)
+        {
+            return tutorialPattern[0];
+        }
+
+        NoteType type = tutorialPattern[tutorialPatternIndex % tutorialPattern.Length];
+        if (advancePattern) tutorialPatternIndex++;
+        return type;
+    }
+
+    private bool TryGetTutorialNoteTypeAtBeat(int beatIndex, out NoteType type)
+    {
+        type = NoteType.Up;
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return false;
+
+        int cyclePos = ((beatIndex % cycle) + cycle) % cycle;
+        if (!IsTutorialSpawnBeat(beatIndex)) return false;
+
+        if (tutorialPattern == null || tutorialPattern.Length == 0)
+        {
+            type = NoteType.Up;
+            return true;
+        }
+
+        if (tutorialMode == 1)
+        {
+            type = tutorialPattern[0];
+            return true;
+        }
+
+        int cyclesBefore = (beatIndex - cyclePos) / cycle;
+        int spawnIndex;
+
+        if (tutorialMode <= 0)
+        {
+            spawnIndex = cyclesBefore;
+        }
+        else
+        {
+            int spawnIndexInCycle = cyclePos - tutorialRestBeats;
+            spawnIndex = (cyclesBefore * tutorialSpawnBeats) + spawnIndexInCycle;
+        }
+
+        int len = tutorialPattern.Length;
+        int index = spawnIndex % len;
+        if (index < 0) index += len;
+        type = tutorialPattern[index];
+        return true;
+    }
+
+    private void LogTutorialFourBeat(double beatTimeMs, double beatIntervalMs)
+    {
+        if (tutorialMode < 0) return;
+        if (tutorialRestBeats < 0 || tutorialSpawnBeats <= 0) return;
+
+        if (nextTutorialWarnBeatIndex < 0)
+        {
+            nextTutorialWarnBeatIndex = GetFirstTutorialSpawnBeatIndex();
+            if (nextTutorialWarnBeatIndex < 0) return;
+        }
+
+        double tutorialTimeMs = beatTimeMs - (tutorialStartBeat * beatIntervalMs);
+        if (tutorialTimeMs < 0) return;
+
+        while (nextTutorialWarnBeatIndex >= 0)
+        {
+            double warnTimeMs = (nextTutorialWarnBeatIndex * beatIntervalMs) + (leadTimeMs - fourBeatMs) - debugFourBeatOffsetMs;
+            if (tutorialTimeMs < warnTimeMs) break;
+
+            if (TryGetTutorialNoteTypeAtBeat(nextTutorialWarnBeatIndex, out NoteType upcoming))
+            {
+                Debug.Log($"[4Beat][Tutorial] Incoming {upcoming}");
+                if (sfxAudioSource != null)
+                {
+                    sfxAudioSource.PlayOneShot(devilWarning[(int)upcoming]);
+                }
+            }
+
+            nextTutorialWarnBeatIndex = GetNextTutorialSpawnBeatIndex(nextTutorialWarnBeatIndex);
+        }
+    }
+
+    private int GetFirstTutorialSpawnBeatIndex()
+    {
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return -1;
+        return tutorialRestBeats;
+    }
+
+    private int GetNextTutorialSpawnBeatIndex(int currentSpawnBeatIndex)
+    {
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return -1;
+
+        if (tutorialMode <= 0)
+        {
+            return currentSpawnBeatIndex + cycle;
+        }
+
+        int cyclePos = ((currentSpawnBeatIndex % cycle) + cycle) % cycle;
+        int lastSpawnInCycle = tutorialRestBeats + tutorialSpawnBeats - 1;
+        if (cyclePos < lastSpawnInCycle)
+        {
+            return currentSpawnBeatIndex + 1;
+        }
+
+        return currentSpawnBeatIndex + (cycle - cyclePos) + tutorialRestBeats;
+    }
+
+    private void RegisterTutorialSpawn(int cycleId)
+    {
+        if (cycleId < 0) return;
+
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state))
+        {
+            state = new TutorialCycleState();
+            tutorialCycles[cycleId] = state;
+        }
+
+        state.expected++;
+    }
+
+    private void HandleTutorialJudge(Note note, JudgeType judgeType)
+    {
+        if (!isTutorial || tutorialMode < 0 || note == null) return;
+        int cycleId = note.tutorialCycleId;
+        if (cycleId < 0) return;
+
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state)) return;
+
+        if (judgeType == JudgeType.Miss) state.failed = true;
+        state.judged++;
+
+        TryFinalizeTutorialCycle(cycleId, state);
+    }
+
+    private void CloseTutorialCycle(int cycleId)
+    {
+        if (cycleId < 0) return;
+        if (!tutorialCycles.TryGetValue(cycleId, out TutorialCycleState state)) return;
+
+        state.closed = true;
+        TryFinalizeTutorialCycle(cycleId, state);
+    }
+
+    private void TryFinalizeTutorialCycle(int cycleId, TutorialCycleState state)
+    {
+        if (!state.closed) return;
+        if (state.judged < state.expected) return;
+
+        if (state.failed)
+        {
+            tutorialSuccessCount = 0;
+        }
+        else
+        {
+            tutorialSuccessCount++;
+            if (tutorialSuccessCount >= tutorialSuccessesToAdvance)
+            {
+                AdvanceTutorialMode();
+
+            }
+        }
+
+        tutorialCycles.Remove(cycleId);
+    }
+
+    private void AdvanceTutorialMode()
+    {
+        tutorialSuccessCount = 0;
+        tutorialPatternIndex = 0;
+        currentTutorialCycleId = -1;
+        tutorialCycles.Clear();
+        nextTutorialWarnBeatIndex = -1;
+
+        nextTutorialMode = tutorialMode + 1;
+        tutorialMode = -1;
+        chatAvailable = true;
+        ProceedTutorial();
+        if (tutorialMode > tutorialMaxMode)
+        {
+            tutorialMode = -1;
+            Debug.Log("튜토리얼 성공");
+        }
+    }
+
+    private void ScheduleTutorialStart(int beatsDelay)
+    {
+        int delay = Mathf.Max(0, beatsDelay);
+        tutorialStartBeat = GetCurrentGlobalBeat() + delay;
+        lastTutorialBeatIndex = -1;
+        lastTutorialFourBeatIndex = -1;
+        currentTutorialCycleId = -1;
+        tutorialCycles.Clear();
+        nextTutorialWarnBeatIndex = -1;
+    }
+
+    private int GetCurrentGlobalBeat()
+    {
+        if (intervalTime <= 0) return 0;
+        double songTimeMs = GetSongTimeMs();
+        int snapOffsetMs = chart != null ? chart.snapOffsetMs : 0;
+        double beatTimeMs = songTimeMs - snapOffsetMs;
+        if (beatTimeMs < 0) return 0;
+        double beatIntervalMs = intervalTime * 1000.0;
+        return (int)Math.Floor(beatTimeMs / beatIntervalMs);
+    }
+
+    private void LogChartFourBeat(double songTimeMs)
+    {
+        if (chart == null || chart.events == null || chart.events.Count == 0) return;
+
+        double beatTimeMs = songTimeMs - chart.snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (beatIndex == lastChartFourBeatIndex) return;
+
+        int warnBeat = beatIndex + 4 - leadBeats;
+        double warnTimeMs = (warnBeat * beatIntervalMs) - debugFourBeatOffsetMs;
+        double targetEventTimeMs = warnTimeMs + chart.snapOffsetMs;
+
+        int idx = nextEventIndex;
+        while (idx < chart.events.Count && chart.events[idx].timeMs < targetEventTimeMs) idx++;
+        if (idx < chart.events.Count && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
+        {
+            Debug.Log($"[4Beat] Incoming {((NoteType)chart.events[idx].action)}");
+            if (sfxAudioSource != null)
+            {
+                sfxAudioSource.PlayOneShot(devilWarning[chart.events[idx].action]);
+            }
+        }
+
+        lastChartFourBeatIndex = beatIndex;
+    }
+
+    private class TutorialCycleState
+    {
+        public int expected;
+        public int judged;
+        public bool failed;
+        public bool closed;
     }
 
     private void SchedulePlayback()
@@ -286,6 +763,14 @@ public class NoteChart
     public float bpm;
     public int snapOffsetMs;
     public List<NoteEvent> events;
+}
+
+[Serializable]
+public class SongEntry
+{
+    public string songId;
+    public string chartResourceName;
+    public AudioClip audioClip;
 }
 
 public enum JudgeType

@@ -749,7 +749,7 @@ MonoBehaviour:
   timingBoxes: []
   noteSpeed: 0
   bpm: 120
-  maxNoteInScreen: 5
+  maxNoteInScreen: 6
   intervalTime: 0
   startPos: {x: 9, y: 2, z: 0}
   endPos: {x: -3, y: -2, z: 0}
@@ -759,7 +759,9 @@ MonoBehaviour:
   notePrefab: {fileID: 442890611634544813, guid: d217fb7727f63c94eb55e60a8e32c054, type: 3}
   judgeNotePrefab: {fileID: 8388868556492255009, guid: d1811153cb882a44d91c55b97e25ebf6, type: 3}
   chartResourceName: Test
-  leadBeats: 5
+  leadBeats: 6
+  debugLeadBeat: 0
+  debugFourBeat: 1
 --- !u!82 &802659861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -771,7 +773,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+  m_Resource: {fileID: 8300000, guid: caaf892f59e0648b285f45d0575c6ce2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

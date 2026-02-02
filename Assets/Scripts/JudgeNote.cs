@@ -19,7 +19,7 @@ public class JudgeNote : MonoBehaviour
 
             if (!(NoteManager.Instance.timingBoxes[2].x > transform.position.x)) return;
             NoteManager.Instance.CheckJudgeType(JudgeType.Miss);
-            NoteManager.Instance.RemoveNote(gameObject);
+            
         }
     }
 }
