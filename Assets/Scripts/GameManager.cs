@@ -56,6 +56,7 @@ public class GameManager : SingletonPersistence<GameManager>
     private System.Collections.IEnumerator DelayedStageSetup()
     {
         yield return null;
+        NoteManager.Instance.songId = currSong;
         NoteManager.Instance.Setting();
         UIManager.Instance.UIReset();
     }
