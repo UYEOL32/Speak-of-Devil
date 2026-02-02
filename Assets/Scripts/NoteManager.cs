@@ -327,7 +327,6 @@ public class NoteManager : Singleton<NoteManager>
                 {
                     RemoveFrontNote((JudgeType)x);
                 }
-                RemoveFrontNote((JudgeType)x);
                 break;
             }
         }
@@ -363,7 +362,13 @@ public class NoteManager : Singleton<NoteManager>
         GameObject judgeNote = judgeNoteQueue.Dequeue();
         if (judgeNote != null)
         {
-            GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
+            JudgeNote judgeNoteComponent = judgeNote.GetComponent<JudgeNote>();
+            if (judgeNoteComponent != null)
+            {
+                judgeNoteComponent.MarkResolved();
+            }
+            judgeNote.SetActive(false);
+            GameObject visualNote = judgeNoteComponent != null ? judgeNoteComponent.noteVisual : null;
             if (visualNote != null)
             {
                 notes.Remove(visualNote);

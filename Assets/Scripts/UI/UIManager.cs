@@ -71,7 +71,7 @@ public class UIManager : Singleton<UIManager>
     {
         if(currHp<0) currHp = 0;
         
-        // hpBarObject.GetComponent<HPVisualController>().UpdateHpBar(currHp);
+        hpBarObject.GetComponent<HPVisualController>().UpdateHpBar(currHp);
     }
 
     public void GameOverEffect()
