@@ -42,14 +42,6 @@ public class NoteManager : Singleton<NoteManager>
     public Action OnEveryBeat;
     public void Setting()
     {
-        if(judgeNoteList.Count != 0)
-            foreach (GameObject judgeNote in judgeNoteList.ToList())
-                RemoveNote(judgeNote);
-
-        if (notes.Count != 0)
-            foreach (GameObject note in notes.ToList())
-                RemoveNote(note);
-        
         LoadChart();
         if (bpm <= 0)
         {
@@ -111,6 +103,35 @@ public class NoteManager : Singleton<NoteManager>
         }
     }
 
+    private void OnDestroy()
+    {
+        // DOTween 등의 트윈 정리
+        foreach (var note in notes)
+        {
+            if (note != null)
+            {
+                Note noteComponent = note.GetComponent<Note>();
+                if (noteComponent != null)
+                {
+                    noteComponent.KillTween();
+                }
+            }
+        }
+
+        // 리스트 정리
+        notes.Clear();
+        judgeNoteList.Clear();
+        notePositions.Clear();
+
+        // 오디오 정리
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
+        // 이벤트 구독 해제
+        OnEveryBeat = null;
+    }
     public void CheckTiming(NoteType noteType)
     {
         List<int> toRemoveList = new List<int>();
@@ -162,10 +183,23 @@ public class NoteManager : Singleton<NoteManager>
 
     public void RemoveNote(GameObject judgeNote)
     {
-        GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
-        notes.Remove(visualNote);
-        visualNote.GetComponent<Note>().KillTween();  // Tween 종료 후 Destroy
-        Destroy(visualNote);
+        if (judgeNote == null) return;
+
+        JudgeNote judgeNoteComponent = judgeNote.GetComponent<JudgeNote>();
+        if (judgeNoteComponent == null) return;
+
+        GameObject visualNote = judgeNoteComponent.noteVisual;
+        
+        if (visualNote != null)
+        {
+            notes.Remove(visualNote);
+            Note noteComponent = visualNote.GetComponent<Note>();
+            if (noteComponent != null)
+            {
+                noteComponent.KillTween();
+            }
+            Destroy(visualNote);
+        }
         
         judgeNoteList.Remove(judgeNote);
         Destroy(judgeNote);

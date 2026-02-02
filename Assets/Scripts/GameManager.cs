@@ -15,8 +15,14 @@ public class GameManager : SingletonPersistence<GameManager>
     {
         base.Awake();
 
-        if (SceneManager.GetActiveScene().name == "Title") UpdateGameState(GameState.Title);
-        else UpdateGameState(GameState.Playing);
+        if (SceneManager.GetActiveScene().name == "Title") gameState = GameState.Title;
+        else
+        {
+            gameState = GameState.Playing;
+            hp = maxHp;
+            NoteManager.Instance.Setting();
+            UIManager.Instance.UIReset();
+        }
     }
 
     public void UpdateGameState(GameState newGameState)
@@ -26,13 +32,13 @@ public class GameManager : SingletonPersistence<GameManager>
         switch (gameState)
         {
             case GameState.Playing:
-                if(SceneManager.GetActiveScene().name != "Stage") SceneManager.LoadScene("Stage");
+                SceneManager.LoadScene("Stage");
                 hp = maxHp;
                 NoteManager.Instance.Setting();
                 UIManager.Instance.UIReset();
                 break;
             case GameState.Title:
-                if(SceneManager.GetActiveScene().name != "Title") SceneManager.LoadScene("Title");
+                SceneManager.LoadScene("Title");
                 break;
             case GameState.Clear:
                 break;
@@ -45,7 +51,6 @@ public class GameManager : SingletonPersistence<GameManager>
 
     public void HpCheck(JudgeType judgeType)
     {
-        return;
         switch (judgeType)
         {
             case JudgeType.Perfect:
