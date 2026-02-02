@@ -849,10 +849,10 @@ MonoBehaviour:
   startPos: {x: 9, y: 2, z: 0}
   endPos: {x: -3, y: -2, z: 0}
   devilWarning:
-  - {fileID: 8300000, guid: 190c769b09193494e824c72cae05e806, type: 3}
-  - {fileID: 8300000, guid: 5a88792a4f5ac485ca73b8d84cbe265f, type: 3}
-  - {fileID: 8300000, guid: 7edce0b8fb5204abf906a72af14216a0, type: 3}
-  - {fileID: 8300000, guid: ca05f054d73914bcc9d60786dec3416b, type: 3}
+  - {fileID: 8300000, guid: 9626fa963f63647788d7f2ea6934aa19, type: 3}
+  - {fileID: 8300000, guid: 2dea6bcbc1cb14c5989a153e64348f4d, type: 3}
+  - {fileID: 8300000, guid: a24a294bc15e2461884c9d543fb1d6d4, type: 3}
+  - {fileID: 8300000, guid: 26327722fa43e40cda7a4590cf447263, type: 3}
   audioSource: {fileID: 802659861}
   sfxAudioSource: {fileID: 802659862}
   startDelaySec: 3
@@ -864,6 +864,18 @@ MonoBehaviour:
   debugLeadBeat: 0
   debugFourBeat: 1
   debugFourBeatOffsetMs: 200
+  useSongId: 1
+  songId: Hellfire On Sahara
+  songEntries:
+  - songId: Hellfire On Sahara
+    chartResourceName: song1
+    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+  - songId: 
+    chartResourceName: song2
+    audioClip: {fileID: 8300000, guid: c428ed643faf04d2da4fde2582f33ac9, type: 3}
+  - songId: 
+    chartResourceName: song3
+    audioClip: {fileID: 8300000, guid: caaf892f59e0648b285f45d0575c6ce2, type: 3}
   isTutorial: 0
   tutorialRestBeats: 5
   tutorialSpawnBeats: 4
@@ -903,7 +915,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.719
+  m_Volume: 0.556
   m_Pitch: 1
   Loop: 0
   Mute: 0

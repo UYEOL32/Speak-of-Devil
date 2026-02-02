@@ -38,6 +38,11 @@ public class NoteManager : Singleton<NoteManager>
     public bool debugFourBeat = false;
     public int debugFourBeatOffsetMs = 0;
 
+    [Header("SONG MAPPING")]
+    public bool useSongId = true;
+    public string songId = "song1";
+    public List<SongEntry> songEntries = new List<SongEntry>();
+
     [Header("TUTORIAL")]
     public bool isTutorial = false;
     public int tutorialRestBeats = 4;
@@ -66,9 +71,7 @@ public class NoteManager : Singleton<NoteManager>
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
-<<<<<<< HEAD
     public Action OnEveryBeat;
-=======
     public TMP_Text tutorialText;
     public bool chatAvailable;
 
@@ -118,7 +121,6 @@ public class NoteManager : Singleton<NoteManager>
         
     }
 
->>>>>>> 861c6c3 (tutorial api wip 1)
     public void Setting()
     {
         LoadChart();
@@ -238,7 +240,13 @@ public class NoteManager : Singleton<NoteManager>
         if (judgeNote == null || judgeNote.noteVisual == null) return;
 
         Note targetNote = judgeNote.noteVisual.GetComponent<Note>();
-        if (targetNote == null || targetNote.noteType != noteType) return;
+        if (targetNote == null) return;
+        if (targetNote.noteType != noteType)
+        {
+            CheckJudgeType(JudgeType.Miss);
+            RemoveFrontNote(JudgeType.Miss);
+            return;
+        }
 
         float pos = judgeObject.transform.localPosition.x;
         for (int x = 0; x < timingBoxes.Length; x++)
@@ -320,6 +328,29 @@ public class NoteManager : Singleton<NoteManager>
         if (chart != null && chart.bpm > 0f)
         {
             bpm = Mathf.RoundToInt(chart.bpm);
+        }
+    }
+
+    private void ResolveSongById()
+    {
+        if (string.IsNullOrEmpty(songId)) return;
+        for (int i = 0; i < songEntries.Count; i++)
+        {
+            SongEntry entry = songEntries[i];
+            if (entry == null || string.IsNullOrEmpty(entry.songId)) continue;
+            if (entry.songId != songId) continue;
+
+            if (!string.IsNullOrEmpty(entry.chartResourceName))
+            {
+                chartResourceName = entry.chartResourceName;
+            }
+            if (audioSource != null && entry.audioClip != null)
+            {
+                audioSource.clip = entry.audioClip;
+            }
+
+            chart = null;
+            return;
         }
     }
 
@@ -727,6 +758,14 @@ public class NoteChart
     public float bpm;
     public int snapOffsetMs;
     public List<NoteEvent> events;
+}
+
+[Serializable]
+public class SongEntry
+{
+    public string songId;
+    public string chartResourceName;
+    public AudioClip audioClip;
 }
 
 public enum JudgeType
