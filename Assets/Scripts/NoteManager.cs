@@ -147,7 +147,6 @@ public class NoteManager : Singleton<NoteManager>
         }
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen,-8,0), Quaternion.identity);
         note.transform.SetParent(transform);
-        judgeNote.transform.SetParent(transform);
         
         judgeNote.GetComponent<JudgeNote>().noteVisual = note;
         
