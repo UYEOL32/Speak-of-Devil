@@ -219,7 +219,7 @@ public class NoteManager : Singleton<NoteManager>
 
     private Vector3 NotePosFunc(int x)
     {
-        if(x == maxNoteInScreen-1) return new Vector3(-6.5f,-3, 0);
+        if(x == maxNoteInScreen-1) return new Vector3(-6.2f,-3.5f, 0);
         Vector3 v = new Vector3((x+1)*xDelta,(x+1)*yDelta,0);
         return startPos - v;
     }
