@@ -43,6 +43,10 @@ public class GameManager : SingletonPersistence<GameManager>
             case GameState.Clear:
                 break;
             case GameState.GameOver:
+                if (NoteManager.Instance != null)
+                {
+                    NoteManager.Instance.ClearAllNotes();
+                }
                 UIManager.Instance.GameOverEffect();
                 break;
         }
