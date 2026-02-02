@@ -1771,6 +1771,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 25f0fc18bc46d49878978475fa4bd013, type: 3}
   audioSource: {fileID: 802659861}
   sfxAudioSource: {fileID: 802659862}
+  inputSfxClips:
+  - {fileID: 8300000, guid: 46f2ccd858d7d428a84d35089b153087, type: 3}
+  - {fileID: 8300000, guid: 0f4a09be866b2492b9fab5f92db1406f, type: 3}
+  - {fileID: 8300000, guid: 9d7f6a9433e3a4d54881e737ab2ac74f, type: 3}
+  - {fileID: 8300000, guid: 2dbce7d04156e46fab34e9085b9c386e, type: 3}
+  goodOrBetterSfx: {fileID: 8300000, guid: c82f2eb1d62a24d32a744f334e761984, type: 3}
   startDelaySec: 5
   dspTime: {fileID: 0}
   notePrefab: {fileID: 442890611634544813, guid: d217fb7727f63c94eb55e60a8e32c054, type: 3}
@@ -3438,12 +3444,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   beatEffect: {fileID: 578157676}
-  hpObject: {fileID: 0}
-  hpBar: {fileID: 1978915438}
   gameOverEffect: {fileID: 1403429581}
   gameOverText: {fileID: 275367103}
   restartButton: {fileID: 628004723}
   exitButton: {fileID: 1800319306}
+  hpBarObject: {fileID: 801898713}
   animationDuration: 0.3
 --- !u!1 &1800319304
 GameObject:

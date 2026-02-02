@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class NoteManager : Singleton<NoteManager>
 {
@@ -23,6 +26,9 @@ public class NoteManager : Singleton<NoteManager>
 
     [Header("AUDIO SOURCE AND...!!")] public AudioSource audioSource;
     public AudioSource sfxAudioSource;
+    public AudioClip[] inputSfxClips = new AudioClip[4];
+    public AudioClip goodOrBetterSfx;
+    public AudioClip goodOrBetterBreakDownSfx;
     public double startDelaySec = 0.1d;
     public TMP_Text dspTime;
     
@@ -71,6 +77,7 @@ public class NoteManager : Singleton<NoteManager>
     private NoteChart chart;
     private int nextEventIndex = 0;
     private int nextFourBeatIndex = 0;
+    private int nextSpecialEventIndex = 0;
     private float leadTimeMs;
     private float fourBeatMs;
     private int lastBeatIndex = -1;
@@ -87,6 +94,7 @@ public class NoteManager : Singleton<NoteManager>
     private int bossIdleLockRemaining = 0;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
+    private readonly Queue<double> pendingStartLogs = new Queue<double>();
 
     public Action OnEveryBeat;
     public TMP_Text tutorialText;
@@ -144,6 +152,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             ResolveSongById();
         }
+        ResetBreakDownMode();
         ClearAllNotes();
         LoadChart();
         ProceedTutorial();
@@ -164,6 +173,7 @@ public class NoteManager : Singleton<NoteManager>
         currentTime = 0d;
         nextEventIndex = 0;
         nextFourBeatIndex = 0;
+        nextSpecialEventIndex = 0;
         lastBeatIndex = -1;
         lastEveryFourBeatIndex = -1;
         lastTutorialBeatIndex = -1;
@@ -176,6 +186,7 @@ public class NoteManager : Singleton<NoteManager>
         tutorialStartBeat = 0;
         nextTutorialWarnBeatIndex = -1;
         bossIdleLockRemaining = 0;
+        pendingStartLogs.Clear();
         SchedulePlayback();
         
         notePositions.Clear();
@@ -217,6 +228,108 @@ public class NoteManager : Singleton<NoteManager>
         }
     }
 
+    public Canvas breakDownCanvas;
+    public RectTransform breakPanel;
+    public RectTransform downPanel;
+
+    public bool breakDownMode;
+
+    public Volume volume;
+
+    public void BreakEffect()
+    {
+        breakDownCanvas.gameObject.SetActive(true);
+        breakPanel.anchoredPosition = new Vector2(-1400, 0);
+        downPanel.anchoredPosition = new Vector2(1400, 0);
+        
+        breakPanel.DOAnchorPosX(0, 0.2f, false);
+
+        volume.enabled = true;
+
+        sfxAudioSource.PlayOneShot(breakClip);
+        
+        volume.profile.TryGet(out Bloom color);
+        volume.profile.TryGet(out ChromaticAberration abre);
+
+        color.active = true;
+        abre.active = true;
+    }
+
+    public void DownEffect()
+    {
+       downPanel.DOAnchorPosX(0, 0.2f, false);
+       
+       sfxAudioSource.PlayOneShot(downClip);
+       
+       volume.profile.TryGet(out ColorAdjustments color);
+       volume.profile.TryGet(out Vignette abre);
+       volume.profile.TryGet(out LensDistortion dist);
+
+       dist.intensity.overrideState = true;
+       DOTween.To(
+               () => dist.intensity.value,
+               x => dist.intensity.value = x,
+               -1f,
+               (float)intervalTime
+           )
+           .SetEase(Ease.InQuart);
+
+
+       color.active = true;
+       abre.active = true;
+    }
+
+
+    public AudioClip breakClip, downClip, outClip;
+    public void BreakDownStart()
+    {
+        volume.profile.TryGet(out Bloom color);
+        volume.profile.TryGet(out ChromaticAberration abre);
+        volume.profile.TryGet(out ColorAdjustments a);
+        volume.profile.TryGet(out Vignette v);
+        
+
+        color.active = false;
+        abre.active = false;
+        a.active = false;
+        v.active = false;
+        
+        breakDownCanvas.gameObject.SetActive(false);
+        breakDownMode = true;
+        
+        
+        volume.profile.TryGet(out LensDistortion dist);
+
+        dist.intensity.overrideState = true;
+        DOTween.To(
+                () => dist.intensity.value,
+                x => dist.intensity.value = x,
+                0,
+                (float)intervalTime
+            )
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => volume.enabled = false);
+    }
+
+    public void BreakDownEnd()
+    {
+        sfxAudioSource.PlayOneShot(outClip);
+        breakDownMode = false;
+    }
+
+    private void ResetBreakDownMode()
+    {
+        breakDownMode = false;
+        if (breakDownCanvas != null)
+        {
+            breakDownCanvas.gameObject.SetActive(false);
+        }
+        if (volume != null)
+        {
+            volume.enabled = false;
+        }
+    }
+    
     private Vector3 NotePosFunc(int x)
     {
         if(x == maxNoteInScreen-1) return new Vector3(-6.2f,-3.5f, 0);
@@ -325,7 +438,6 @@ public class NoteManager : Singleton<NoteManager>
                 {
                     RemoveFrontNote((JudgeType)x);
                 }
-                RemoveFrontNote((JudgeType)x);
                 break;
             }
         }
@@ -361,7 +473,13 @@ public class NoteManager : Singleton<NoteManager>
         GameObject judgeNote = judgeNoteQueue.Dequeue();
         if (judgeNote != null)
         {
-            GameObject visualNote = judgeNote.GetComponent<JudgeNote>().noteVisual;
+            JudgeNote judgeNoteComponent = judgeNote.GetComponent<JudgeNote>();
+            if (judgeNoteComponent != null)
+            {
+                judgeNoteComponent.MarkResolved();
+            }
+            judgeNote.SetActive(false);
+            GameObject visualNote = judgeNoteComponent != null ? judgeNoteComponent.noteVisual : null;
             if (visualNote != null)
             {
                 notes.Remove(visualNote);
@@ -394,6 +512,13 @@ public class NoteManager : Singleton<NoteManager>
     public void CheckJudgeType(JudgeType judgeType, NoteType noteType)
     {
         if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
+        if (judgeType <= JudgeType.Good && sfxAudioSource != null && goodOrBetterSfx != null)
+        {
+            AudioClip clip = breakDownMode && goodOrBetterBreakDownSfx != null
+                ? goodOrBetterBreakDownSfx
+                : goodOrBetterSfx;
+            sfxAudioSource.PlayOneShot(clip);
+        }
         
         UIManager.Instance.ChangeJudgeIconAndJudgeText(judgeType, noteType);
     }
@@ -443,11 +568,55 @@ public class NoteManager : Singleton<NoteManager>
     {
         if (chart == null || chart.events == null || chart.events.Count == 0) return;
 
+        while (pendingStartLogs.Count > 0)
+        {
+            if (currentMs < pendingStartLogs.Peek()) break;
+            BreakDownStart();
+            Debug.Log("[Event] Start");
+            pendingStartLogs.Dequeue();
+        }
+
+        while (nextSpecialEventIndex < chart.events.Count)
+        {
+            NoteEvent evt = chart.events[nextSpecialEventIndex];
+            if (evt.action < 5)
+            {
+                nextSpecialEventIndex++;
+                continue;
+            }
+            if (currentMs < evt.timeMs) break;
+
+            switch (evt.action)
+            {
+                case 5:
+                    Debug.Log("[Event] Break!");
+                    BreakEffect();
+                    break;
+                case 6:
+                    Debug.Log("[Event] Down");
+                    DownEffect();
+                    pendingStartLogs.Enqueue(evt.timeMs + (intervalTime * 1000.0));
+                    break;
+                case 7:
+                    Debug.Log("[Event] Out");
+                    break;
+                default:
+                    Debug.Log($"[Event] action={evt.action}");
+                    break;
+            }
+            nextSpecialEventIndex++;
+        }
+
         if (debugFourBeat)
         {
             while (nextFourBeatIndex < chart.events.Count)
             {
                 NoteEvent evt = chart.events[nextFourBeatIndex];
+                if (evt.action >= 4)
+                {
+                    nextFourBeatIndex++;
+                    continue;
+                }
                 double logTimeMs = evt.timeMs - (fourBeatMs + debugFourBeatOffsetMs);
                 if (currentMs < logTimeMs) break;
 
@@ -466,6 +635,11 @@ public class NoteManager : Singleton<NoteManager>
         while (nextEventIndex < chart.events.Count)
         {
             NoteEvent evt = chart.events[nextEventIndex];
+            if (evt.action >= 4)
+            {
+                nextEventIndex++;
+                continue;
+            }
             double spawnTimeMs = evt.timeMs - leadTimeMs;
             if (currentMs < spawnTimeMs) break;
 
@@ -805,7 +979,8 @@ public class NoteManager : Singleton<NoteManager>
 
         int idx = nextEventIndex;
         while (idx < chart.events.Count && chart.events[idx].timeMs < targetEventTimeMs) idx++;
-        if (idx < chart.events.Count && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
+        while (idx < chart.events.Count && chart.events[idx].timeMs == targetEventTimeMs && chart.events[idx].action >= 4) idx++;
+        if (idx < chart.events.Count && chart.events[idx].action < 4 && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
         {
             Debug.Log($"[4Beat] Incoming {((NoteType)chart.events[idx].action)}");
             if (sfxAudioSource != null)
@@ -855,6 +1030,16 @@ public class NoteManager : Singleton<NoteManager>
         }
         playerUnitAnimator.SetAnimationIndex(index);
         playerUnitAnimator.PlayAnimation();
+    }
+
+    public void PlayInputSfx(NoteType noteType)
+    {
+        if (sfxAudioSource == null) return;
+        int index = (int)noteType;
+        if (inputSfxClips == null || index < 0 || index >= inputSfxClips.Length) return;
+        AudioClip clip = inputSfxClips[index];
+        if (clip == null) return;
+        sfxAudioSource.PlayOneShot(clip);
     }
 
     private class TutorialCycleState
