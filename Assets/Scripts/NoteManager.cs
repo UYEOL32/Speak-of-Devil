@@ -52,6 +52,8 @@ public class NoteManager : Singleton<NoteManager>
     public int tutorialSuccessesToAdvance = 3;
     public NoteType[] tutorialPattern;
     
+    List<GameObject> judgeNoteList = new List<GameObject>();
+    
     private List<Vector3> notePositions = new List<Vector3>();
     private NoteChart chart;
     private int nextEventIndex = 0;
@@ -123,6 +125,10 @@ public class NoteManager : Singleton<NoteManager>
 
     public void Setting()
     {
+        if (useSongId)
+        {
+            ResolveSongById();
+        }
         LoadChart();
         ProceedTutorial();
         if (bpm <= 0)
@@ -270,7 +276,6 @@ public class NoteManager : Singleton<NoteManager>
         {
             noteComponent.noteType = noteType;
             noteComponent.tutorialCycleId = tutorialCycleId;
-            noteComponent.SetVisualDirection(noteType);
             noteComponent.InitMove(notePositions, intervalTime, maxNoteInScreen, inBeatOffset/((float)intervalTime*1000));
         }
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen,-8,0), Quaternion.identity);

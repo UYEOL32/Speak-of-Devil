@@ -39,7 +39,7 @@ public class GameManager : SingletonPersistence<GameManager>
 
 
                 NoteManager.Instance.Setting();
-                UIManager.Instance.UIReset();
+                // UIManager.Instance.UIReset();
                 break;
             case GameState.Title:
                 SceneManager.LoadScene("Title");
