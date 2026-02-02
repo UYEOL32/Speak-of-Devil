@@ -30,9 +30,16 @@ public class NoteManager : Singleton<NoteManager>
 
     [Header("CHART")]
     public string chartResourceName = "Test";
-    public float leadBeats = 5f;
+    public int leadBeats = 5;
     public bool debugLeadBeat = false;
     public bool debugFourBeat = false;
+
+    [Header("TUTORIAL")]
+    public bool isTutorial = false;
+    public int tutorialRestBeats = 4;
+    public int tutorialSpawnBeats = 4;
+    public int tutorialMode = 1;
+    public NoteType[] tutorialPattern;
     
     private List<Vector3> notePositions = new List<Vector3>();
     private NoteChart chart;
@@ -41,6 +48,10 @@ public class NoteManager : Singleton<NoteManager>
     private float leadTimeMs;
     private float fourBeatMs;
     private int lastBeatIndex = -1;
+    private int lastTutorialBeatIndex = -1;
+    private int tutorialPatternIndex = 0;
+    private int lastTutorialFourBeatIndex = -1;
+    private int lastChartFourBeatIndex = -1;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
 
@@ -66,6 +77,10 @@ public class NoteManager : Singleton<NoteManager>
         nextEventIndex = 0;
         nextFourBeatIndex = 0;
         lastBeatIndex = -1;
+        lastTutorialBeatIndex = -1;
+        tutorialPatternIndex = 0;
+        lastTutorialFourBeatIndex = -1;
+        lastChartFourBeatIndex = -1;
         SchedulePlayback();
         
         notePositions.Clear();
@@ -101,7 +116,14 @@ public class NoteManager : Singleton<NoteManager>
 
 
             double songTimeMs = GetSongTimeMs();
-            SpawnDueNotes(songTimeMs);
+            if (isTutorial)
+            {
+                HandleTutorial(songTimeMs);
+            }
+            else
+            {
+                SpawnDueNotes(songTimeMs);
+            }
             HandleBeatEffect(songTimeMs);
         }
     }
@@ -236,9 +258,11 @@ public class NoteManager : Singleton<NoteManager>
                 double logTimeMs = evt.timeMs - fourBeatMs;
                 if (currentMs < logTimeMs) break;
 
-                Debug.Log($"[4Beat] Incoming {((NoteType)evt.action)}");
+                Debug.Log($"[4Beat][Spawn] Incoming {((NoteType)evt.action)}");
                 nextFourBeatIndex++;
             }
+
+            LogChartFourBeat(currentMs);
         }
 
         while (nextEventIndex < chart.events.Count)
@@ -283,6 +307,129 @@ public class NoteManager : Singleton<NoteManager>
             OnEveryBeat?.Invoke();
             currentTime -= intervalTime;
         }
+    }
+
+    private void HandleTutorial(double songTimeMs)
+    {
+        if (tutorialRestBeats < 0 || tutorialSpawnBeats <= 0) return;
+
+        int snapOffsetMs = chart != null ? chart.snapOffsetMs : 0;
+        double beatTimeMs = songTimeMs - snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (beatIndex == lastTutorialBeatIndex) return;
+
+        lastTutorialBeatIndex = beatIndex;
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return;
+
+        if (debugFourBeat && lastTutorialFourBeatIndex != beatIndex)
+        {
+            int warnBeat = beatIndex + 4 - leadBeats;
+            if (TryGetTutorialNoteTypeAtBeat(warnBeat, out NoteType upcoming))
+            {
+                Debug.Log($"[4Beat][Tutorial] Incoming {upcoming}");
+                lastTutorialFourBeatIndex = beatIndex;
+            }
+        }
+
+        if (!IsTutorialSpawnBeat(beatIndex)) return;
+
+        NoteType type = GetTutorialNoteType(true);
+        GenerateNote(type);
+    }
+
+    private bool IsTutorialSpawnBeat(int beatIndex)
+    {
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return false;
+
+        int cyclePos = ((beatIndex % cycle) + cycle) % cycle;
+        if (tutorialMode == 1)
+        {
+            return cyclePos == tutorialRestBeats;
+        }
+
+        return cyclePos >= tutorialRestBeats;
+    }
+
+    private NoteType GetTutorialNoteType(bool advancePattern)
+    {
+        if (tutorialPattern == null || tutorialPattern.Length == 0) return NoteType.Up;
+
+        if (tutorialMode == 2)
+        {
+            return tutorialPattern[0];
+        }
+
+        NoteType type = tutorialPattern[tutorialPatternIndex % tutorialPattern.Length];
+        if (advancePattern) tutorialPatternIndex++;
+        return type;
+    }
+
+    private bool TryGetTutorialNoteTypeAtBeat(int beatIndex, out NoteType type)
+    {
+        type = NoteType.Up;
+        int cycle = tutorialRestBeats + tutorialSpawnBeats;
+        if (cycle <= 0) return false;
+
+        int cyclePos = ((beatIndex % cycle) + cycle) % cycle;
+        if (!IsTutorialSpawnBeat(beatIndex)) return false;
+
+        if (tutorialPattern == null || tutorialPattern.Length == 0)
+        {
+            type = NoteType.Up;
+            return true;
+        }
+
+        if (tutorialMode == 2)
+        {
+            type = tutorialPattern[0];
+            return true;
+        }
+
+        int cyclesBefore = (beatIndex - cyclePos) / cycle;
+        int spawnIndex;
+
+        if (tutorialMode == 1)
+        {
+            spawnIndex = cyclesBefore;
+        }
+        else
+        {
+            int spawnIndexInCycle = cyclePos - tutorialRestBeats;
+            spawnIndex = (cyclesBefore * tutorialSpawnBeats) + spawnIndexInCycle;
+        }
+
+        type = tutorialPattern[spawnIndex % tutorialPattern.Length];
+        return true;
+    }
+
+    private void LogChartFourBeat(double songTimeMs)
+    {
+        if (chart == null || chart.events == null || chart.events.Count == 0) return;
+
+        double beatTimeMs = songTimeMs - chart.snapOffsetMs;
+        if (beatTimeMs < 0) return;
+
+        double beatIntervalMs = intervalTime * 1000.0;
+        int beatIndex = (int)Math.Floor(beatTimeMs / beatIntervalMs);
+        if (beatIndex == lastChartFourBeatIndex) return;
+
+        int warnBeat = beatIndex + 4;
+        double warnTimeMs = warnBeat * beatIntervalMs;
+        double targetEventTimeMs = warnTimeMs + chart.snapOffsetMs;
+
+        int idx = nextEventIndex;
+        while (idx < chart.events.Count && chart.events[idx].timeMs < targetEventTimeMs) idx++;
+        if (idx < chart.events.Count && Math.Abs(chart.events[idx].timeMs - targetEventTimeMs) <= 1.0)
+        {
+            Debug.Log($"[4Beat] Incoming {((NoteType)chart.events[idx].action)}");
+        }
+
+        lastChartFourBeatIndex = beatIndex;
     }
 
     private void SchedulePlayback()
