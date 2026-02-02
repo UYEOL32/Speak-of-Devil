@@ -37,11 +37,6 @@ public class UIManager : Singleton<UIManager>
         hpBar.maxValue = GameManager.Instance.maxHp;
         hpBar.value = hpBar.maxValue;
     }
-    
-    void Start()
-    {
-        // UIReset();
-    }
 
     public void CallBeatEffect()
     {

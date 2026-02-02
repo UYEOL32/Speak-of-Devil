@@ -301,6 +301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97fa3811722da74995a6aa688794fef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeadBodyController
+  target: {fileID: 0}
+  localOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &326578865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,6 +918,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAnimator
   animations:
+  - animationName: Idle
+    headPrefab: {fileID: 7374135428907644504, guid: 575b1b07c2d9a42439f2a06cb96eecd1, type: 3}
+    bodyPrefab: {fileID: 7204270666106493834, guid: dedc168674e69084ead17e7d9ea524e9, type: 3}
   - animationName: Up
     headPrefab: {fileID: 8671739569258328694, guid: 63f78dd02240db643a959b87c23631f7, type: 3}
     bodyPrefab: {fileID: 8504152944554046256, guid: c6e5c9863fef8cc4283ff0520d398dfb, type: 3}
@@ -1019,6 +1024,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578157676}
   m_CullTransparentMesh: 1
+--- !u!1 &601971946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 601971947}
+  m_Layer: 0
+  m_Name: Hp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &601971947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601971946}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6, y: -5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &628004721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1513,13 +1549,36 @@ MonoBehaviour:
   intervalTime: 0
   startPos: {x: 9, y: 2, z: 0}
   endPos: {x: -3, y: -2, z: 0}
+  devilWarning: []
   audioSource: {fileID: 802659861}
+  sfxAudioSource: {fileID: 0}
   startDelaySec: 0.1
   dspTime: {fileID: 0}
   notePrefab: {fileID: 442890611634544813, guid: d217fb7727f63c94eb55e60a8e32c054, type: 3}
   judgeNotePrefab: {fileID: 8388868556492255009, guid: d1811153cb882a44d91c55b97e25ebf6, type: 3}
   chartResourceName: Test
   leadBeats: 5
+  debugLeadBeat: 0
+  debugFourBeat: 0
+  debugFourBeatOffsetMs: 0
+  useSongId: 1
+  songId: song1
+  songEntries: []
+  isTutorial: 0
+  tutorialRestBeats: 4
+  tutorialSpawnBeats: 4
+  tutorialMode: 0
+  tutorialMaxMode: 2
+  tutorialSuccessesToAdvance: 3
+  tutorialPattern: 
+  tutorialText: {fileID: 0}
+  chatAvailable: 0
+  nextTutorialMode: 0
+  tutorialDialogIndex: 
+  tutorialDialog: []
+  currentDialogIndex: -1
+  judgeEffect: {fileID: 0}
+  colors: []
 --- !u!82 &802659861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3394,3 +3453,4 @@ SceneRoots:
   - {fileID: 881875852}
   - {fileID: 1968057796}
   - {fileID: 472700056}
+  - {fileID: 601971947}

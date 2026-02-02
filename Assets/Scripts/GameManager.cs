@@ -62,7 +62,6 @@ public class GameManager : SingletonPersistence<GameManager>
 
     public void HpCheck(JudgeType judgeType)
     {
-        
         switch (judgeType)
         {
             case JudgeType.Perfect:
