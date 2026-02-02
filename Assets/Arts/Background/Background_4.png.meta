@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f78784ffce538d14fad1a1fd308a2a3e
+guid: 4acd839c1c6d3e048a31309c2319f078
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1888388707204297261
-    second: character_boss_2-head_0
+      213: 5291437818912269135
+    second: Background_4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: character_boss_2-head_0
+      name: Background_4_0
       rect:
         serializedVersion: 2
-        x: 155
-        y: 136
-        width: 641
-        height: 463
-      alignment: 9
-      pivot: {x: 0.708532, y: -0.17128147}
+        x: 0
+        y: 0
+        width: 1920
+        height: 816
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3dd8a35d9781bc5e0800000000000000
-      internalID: -1888388707204297261
+      spriteID: f43655b39a6fe6940800000000000000
+      internalID: 5291437818912269135
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b8d362344f4e32e44a6d4ca008c7a521
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      character_boss_2-head_0: -1888388707204297261
+      Background_4_0: 5291437818912269135
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
