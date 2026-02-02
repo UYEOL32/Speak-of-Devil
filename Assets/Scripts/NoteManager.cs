@@ -359,11 +359,31 @@ public class NoteManager : Singleton<NoteManager>
             else
             {
                 SpawnDueNotes(songTimeMs);
+                if (IsGameCleared())
+                {
+                    OnGameCleared();
+                }
             }
             HandleBeatEffect(songTimeMs);
         }
     }
-
+    
+    private bool IsGameCleared()
+    {
+        // 1. 모든 차트 이벤트를 다 처리했는지
+        bool allEventsSpawned = (chart != null && chart.events != null && 
+                                 nextEventIndex >= chart.events.Count);
+    
+        // 2. 화면에 남은 노트가 없는지
+        bool noNotesRemaining = (judgeNoteQueue.Count == 0);
+    
+        return allEventsSpawned && noNotesRemaining;
+    }
+    private void OnGameCleared()
+    {
+        // 클리어 처리 (한 번만 실행되도록 플래그 필요)
+        GameManager.Instance.UpdateGameState(GameState.Clear);
+    }
     private void OnDestroy()
     {
         // DOTween 등의 트윈 정리

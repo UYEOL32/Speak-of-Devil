@@ -13,6 +13,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject beatEffect;
     [SerializeField] RectTransform gameOverEffect;
     [SerializeField] TextMeshProUGUI gameOverText;
+    [SerializeField] TextMeshProUGUI gameClearText;
     [SerializeField] Button restartButton;
     [SerializeField] Button exitButton;
     [SerializeField] GameObject hpBarObject;
@@ -93,6 +94,24 @@ public class UIManager : Singleton<UIManager>
                     restartButton.gameObject.SetActive(true);
                     exitButton.gameObject.SetActive(true);
                 });
+        });
+    }
+    
+    public void GameClearEffect()
+    {
+        arrowImage.gameObject.SetActive(false);
+        judgeTextImage.gameObject.SetActive(false);
+        speechBubble.gameObject.SetActive(false);
+        Vector2 targetPos = new Vector2(0, 0);
+        gameOverEffect.anchoredPosition = new Vector2(0,1080);
+        
+        gameOverEffect.DOAnchorPos(targetPos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() => 
+        {
+            gameClearText.color = new Color(gameClearText.color.r, gameClearText.color.g, gameClearText.color.b, 0f);
+            gameClearText.DOFade(1f, 0.3f).SetEase(Ease.OutQuad).OnComplete(() =>
+            {
+                exitButton.gameObject.SetActive(true);
+            });
         });
     }
 

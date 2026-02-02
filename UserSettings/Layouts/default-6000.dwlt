@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 388}
   m_MaxSize: {x: 10000, y: 10000}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -194,12 +194,12 @@ MonoBehaviour:
     height: 466
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 13}
+  m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
   - {fileID: 13}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 43
     width: 1920
     height: 36
   m_SerializedDataModeController:
@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 79
     width: 939
     height: 440
   m_SerializedDataModeController:
@@ -617,7 +617,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -673,7 +673,7 @@ MonoBehaviour:
     x: 0
     y: 79
     width: 939
-    height: 441
+    height: 440
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1258,9 +1258,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -135.93547, y: 66.23995, z: -6.603691}
+    m_Target: {x: -1.6489186, y: -1.052804, z: -0.03312338}
     speed: 2
-    m_Value: {x: -135.93547, y: 66.23995, z: -6.603691}
+    m_Value: {x: -1.6489186, y: -1.052804, z: -0.03312338}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1310,9 +1310,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 660.4592
+    m_Target: 6.3679366
     speed: 2
-    m_Value: 660.4592
+    m_Value: 6.3679366
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1367,8 +1367,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 941
-    y: 24
+    x: 940
+    y: 79
     width: 459
     height: 440
   m_SerializedDataModeController:
@@ -1391,7 +1391,16 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
+      - m_Data: -45060
+      - m_Data: -44736
+      - m_Data: -43964
+      - m_Data: -43936
+      - m_Data: -26054
       - m_Data: -1314
+      - m_Data: 49366
+      - m_Data: 49406
+      - m_Data: 53924
+      - m_Data: 54050
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1439,7 +1448,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 490
+    y: 545
     width: 1400
     height: 441
   m_SerializedDataModeController:
@@ -1466,7 +1475,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scripts
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1476,7 +1485,7 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\uyeol\OneDrive\Documents\GitHub\Speak-of-Devil
   m_LockTracker:
@@ -1485,9 +1494,9 @@ MonoBehaviour:
   m_FolderTreeState:
     scrollPos: {x: 0, y: 76}
     m_SelectedIDs:
-    - m_Data: 50650
+    - m_Data: 50646
     m_LastClickedID:
-      m_Data: 50650
+      m_Data: 50646
     m_ExpandedIDs:
     - m_Data: 0
     - m_Data: 50636
@@ -1498,6 +1507,8 @@ MonoBehaviour:
     - m_Data: 50646
     - m_Data: 50648
     - m_Data: 50650
+    - m_Data: 50740
+    - m_Data: 1000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1662,8 +1673,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1402
-    y: 24
+    x: 1401
+    y: 79
     width: 518
     height: 907
   m_SerializedDataModeController:

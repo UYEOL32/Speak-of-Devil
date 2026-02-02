@@ -43,6 +43,11 @@ public class GameManager : SingletonPersistence<GameManager>
                 SceneManager.LoadScene("Title");
                 break;
             case GameState.Clear:
+                if (NoteManager.Instance != null)
+                {
+                    NoteManager.Instance.ClearAllNotes();
+                }
+                UIManager.Instance.GameClearEffect();
                 break;
             case GameState.GameOver:
                 if (NoteManager.Instance != null)

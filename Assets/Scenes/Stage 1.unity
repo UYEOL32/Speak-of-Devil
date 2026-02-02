@@ -637,7 +637,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!224 &346418975
 RectTransform:
@@ -793,7 +793,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 5.15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1874,9 +1874,11 @@ MonoBehaviour:
   intervalTime: 0
   startPos: {x: 9, y: 2, z: 0}
   endPos: {x: -3, y: -2, z: 0}
-  devilWarning: [{fileID: 8300000, guid: 94e23d0678d9147a498364e0148c3b0a, type: 3},
-    {fileID: 8300000, guid: eaa02d68de7c944bca87b62d4b028c1a, type: 3}, {fileID: 8300000, guid: 5691801d766f54090b4504539ab0fd59, type: 3},
-    {fileID: 8300000, guid: 25f0fc18bc46d49878978475fa4bd013, type: 3}]
+  devilWarning:
+  - {fileID: 8300000, guid: 94e23d0678d9147a498364e0148c3b0a, type: 3}
+  - {fileID: 8300000, guid: eaa02d68de7c944bca87b62d4b028c1a, type: 3}
+  - {fileID: 8300000, guid: 5691801d766f54090b4504539ab0fd59, type: 3}
+  - {fileID: 8300000, guid: 25f0fc18bc46d49878978475fa4bd013, type: 3}
   audioSource: {fileID: 802659861}
   sfxAudioSource: {fileID: 802659862}
   inputSfxClips:
@@ -1898,9 +1900,16 @@ MonoBehaviour:
   debugEveryFourBeats: 1
   useSongId: 1
   songId: Knocking On Hell's Door
-  songEntries: [{songId: Hellfire On Sahara, chartResourceName: song1, audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}},
-    {songId: Knocking On Hell's Door, chartResourceName: song2, audioClip: {fileID: 8300000, guid: c428ed643faf04d2da4fde2582f33ac9, type: 3}},
-    {songId: Rip Out Devil's Heart, chartResourceName: song3, audioClip: {fileID: 8300000, guid: caaf892f59e0648b285f45d0575c6ce2, type: 3}}]
+  songEntries:
+  - songId: Hellfire On Sahara
+    chartResourceName: song1
+    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+  - songId: Knocking On Hell's Door
+    chartResourceName: song2
+    audioClip: {fileID: 8300000, guid: c428ed643faf04d2da4fde2582f33ac9, type: 3}
+  - songId: Rip Out Devil's Heart
+    chartResourceName: song3
+    audioClip: {fileID: 8300000, guid: caaf892f59e0648b285f45d0575c6ce2, type: 3}
   bossUnitAnimator: {fileID: 535513534}
   debugBossAnim: 0
   bossIdleLockBeats: 2
@@ -2661,7 +2670,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 5212168117751077929, guid: c5adf573af48fde478e49ad399ca6000, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3516,7 +3525,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 6eb47bde-42fc-4e4a-bf7d-0e5fb8fc6915
-    m_ActionName: Player/UpKeys[/Keyboard/w,/Keyboard/upArrow]
+    m_ActionName: 'Player/UpKeys[/Keyboard/w,/Keyboard/upArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3532,7 +3541,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 77952b63-4d86-477a-a3b1-04aefac099fb
-    m_ActionName: Player/DownKeys[/Keyboard/s,/Keyboard/downArrow]
+    m_ActionName: 'Player/DownKeys[/Keyboard/s,/Keyboard/downArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3548,7 +3557,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: d6ba1b29-e6b0-411b-ac15-02f6b24d735b
-    m_ActionName: Player/LeftKeys[/Keyboard/a,/Keyboard/leftArrow]
+    m_ActionName: 'Player/LeftKeys[/Keyboard/a,/Keyboard/leftArrow]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1505738281}
@@ -3564,11 +3573,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 1a7fff33-21a2-4ef3-8df8-b414d64ababd
-    m_ActionName: Player/RightKeys[/Keyboard/d,/Keyboard/rightArrow]
+    m_ActionName: 'Player/RightKeys[/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 89bb4061-0c76-4918-bcd8-da4306a61506
-    m_ActionName: Player/TutorialProceed[/Keyboard/space]
+    m_ActionName: 'Player/TutorialProceed[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
