@@ -109,6 +109,8 @@ MonoBehaviour:
   currentNoteIndex: 0
   noteType: 0
   tutorialCycleId: -1
+  missEffectPrefab: {fileID: 5915748923943861943, guid: b558093ed7510418991ff1a98325de84, type: 3}
+  hitMoveDuration: 0.1
 --- !u!1 &4310906136843770156
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,8 @@ public class Note : MonoBehaviour
     private List<Vector3> notePositions;
     private int maxNoteInScreen;
     private Coroutine moveRoutine;
+    [SerializeField] private GameObject missEffectPrefab;
+    [SerializeField] private float hitMoveDuration = 0.1f;
 
     public void Awake()
     {
@@ -64,6 +66,30 @@ public class Note : MonoBehaviour
     {
         currentTween?.Kill();  // 이전 Tween 종료
         currentTween = transform.DOMove(targetPosition, (float)intervalTime / 2).SetEase(Ease.OutExpo);
+    }
+
+    public void PlayHit(Transform target)
+    {
+        if (target == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        KillTween();
+        currentTween = transform.DOMove(target.position, hitMoveDuration)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() => Destroy(gameObject));
+    }
+
+    public void PlayMiss()
+    {
+        KillTween();
+        if (missEffectPrefab != null)
+        {
+            Instantiate(missEffectPrefab, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 
     public void SetVisualDirection(NoteType type)

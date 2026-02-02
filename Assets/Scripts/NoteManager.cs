@@ -37,6 +37,7 @@ public class NoteManager : Singleton<NoteManager>
     public bool debugLeadBeat = false;
     public bool debugFourBeat = false;
     public int debugFourBeatOffsetMs = 0;
+    public bool debugEveryFourBeats = false;
 
     [Header("SONG MAPPING")]
     public bool useSongId = true;
@@ -60,6 +61,9 @@ public class NoteManager : Singleton<NoteManager>
     public int tutorialMaxMode = 2;
     public int tutorialSuccessesToAdvance = 3;
     public NoteType[] tutorialPattern;
+
+    [Header("HIT TARGETS")]
+    public Transform[] hitTargets = new Transform[4];
     
     List<GameObject> judgeNoteList = new List<GameObject>();
     
@@ -70,6 +74,7 @@ public class NoteManager : Singleton<NoteManager>
     private float leadTimeMs;
     private float fourBeatMs;
     private int lastBeatIndex = -1;
+    private int lastEveryFourBeatIndex = -1;
     private int lastTutorialBeatIndex = -1;
     private int tutorialPatternIndex = 0;
     private int lastTutorialFourBeatIndex = -1;
@@ -160,6 +165,7 @@ public class NoteManager : Singleton<NoteManager>
         nextEventIndex = 0;
         nextFourBeatIndex = 0;
         lastBeatIndex = -1;
+        lastEveryFourBeatIndex = -1;
         lastTutorialBeatIndex = -1;
         tutorialPatternIndex = 0;
         lastTutorialFourBeatIndex = -1;
@@ -269,6 +275,15 @@ public class NoteManager : Singleton<NoteManager>
     }
     public SpriteRenderer judgeEffect;
     public Color[] colors;
+
+    private Transform GetHitTarget(NoteType noteType)
+    {
+        if (hitTargets == null) return null;
+        int index = (int)noteType;
+        if (index < 0 || index >= hitTargets.Length) return null;
+        return hitTargets[index];
+    }
+
     public void CheckTiming(NoteType noteType)
     {
         if (judgeNoteQueue.Count == 0) return;
@@ -293,13 +308,23 @@ public class NoteManager : Singleton<NoteManager>
             RemoveFrontNote(JudgeType.Miss);
             return;
         }
+
+        Transform hitTarget = GetHitTarget(noteType);
         for (int x = 0; x < timingBoxes.Length; x++)
         {
             if (timingBoxes[x].x <= pos && timingBoxes[x].y >= pos)
             {
                 
                 CheckJudgeType((JudgeType)x);
-                RemoveFrontNote((JudgeType)x);
+                if (hitTarget != null)
+                {
+                    targetNote.PlayHit(hitTarget);
+                    RemoveFrontNote((JudgeType)x, false);
+                }
+                else
+                {
+                    RemoveFrontNote((JudgeType)x);
+                }
                 break;
             }
         }
@@ -327,7 +352,7 @@ public class NoteManager : Singleton<NoteManager>
     
     void GenerateNote(NoteType noteType) => GenerateNote(noteType, 0);
 
-    public void RemoveFrontNote(JudgeType judgeType)
+    public void RemoveFrontNote(JudgeType judgeType, bool destroyVisual = true)
     {
         if (judgeNoteQueue.Count == 0) return;
 
@@ -342,9 +367,24 @@ public class NoteManager : Singleton<NoteManager>
                 if (note != null)
                 {
                     HandleTutorialJudge(note, judgeType);
-                    note.KillTween();
+                    if (judgeType == JudgeType.Miss)
+                    {
+                        note.PlayMiss();
+                        destroyVisual = false;
+                    }
+                    else if (!destroyVisual)
+                    {
+                        // Visual note handles its own cleanup (ex: hit animation).
+                    }
+                    else
+                    {
+                        note.KillTween();
+                    }
                 }
-                Destroy(visualNote);
+                if (destroyVisual)
+                {
+                    Destroy(visualNote);
+                }
             }
             Destroy(judgeNote);
         }
@@ -464,6 +504,11 @@ public class NoteManager : Singleton<NoteManager>
             if (bossIdleLockRemaining > 0)
             {
                 bossIdleLockRemaining--;
+            }
+            if (debugEveryFourBeats && beatIndex % 4 == 0 && beatIndex != lastEveryFourBeatIndex)
+            {
+                Debug.Log($"[Every4Beat] beatIndex={beatIndex}");
+                lastEveryFourBeatIndex = beatIndex;
             }
             currentTime -= intervalTime;
         }
