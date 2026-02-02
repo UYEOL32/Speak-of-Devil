@@ -129,6 +129,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             ResolveSongById();
         }
+        ClearAllNotes();
         LoadChart();
         ProceedTutorial();
         if (bpm <= 0)
@@ -174,6 +175,28 @@ public class NoteManager : Singleton<NoteManager>
         {
             float width = timingRect[i].GetComponent<BoxCollider2D>().size.x/2;
             timingBoxes[i].Set(center.position.x - width, center.position.x + width);
+        }
+    }
+
+    public void ClearAllNotes()
+    {
+        for (int i = 0; i < notes.Count; i++)
+        {
+            GameObject note = notes[i];
+            if (note == null) continue;
+            Note noteComponent = note.GetComponent<Note>();
+            if (noteComponent != null) noteComponent.KillTween();
+            Destroy(note);
+        }
+        notes.Clear();
+
+        while (judgeNoteQueue.Count > 0)
+        {
+            GameObject judgeNote = judgeNoteQueue.Dequeue();
+            if (judgeNote != null)
+            {
+                Destroy(judgeNote);
+            }
         }
     }
 
