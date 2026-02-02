@@ -117,6 +117,9 @@ public class NoteManager : Singleton<NoteManager>
     {
         GameObject note = Instantiate(notePrefab, notePositions[0], Quaternion.identity);
         GameObject judgeNote = Instantiate(judgeNotePrefab, new Vector3(maxNoteInScreen-1,-8,0), Quaternion.identity);
+        note.transform.SetParent(transform);
+        judgeNote.transform.SetParent(transform);
+        
         judgeNote.GetComponent<JudgeNote>().noteVisual = note;
         notes.Add(note);
         judgeNoteList.Add(judgeNote);
