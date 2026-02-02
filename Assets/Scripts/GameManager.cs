@@ -15,6 +15,8 @@ public class GameManager : SingletonPersistence<GameManager>
     {
         base.Awake();
 
+        Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+        
         if (SceneManager.GetActiveScene().name == "Title") gameState = GameState.Title;
         else
         {
