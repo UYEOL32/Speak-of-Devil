@@ -770,7 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameState: 0
-  maxHp: 100
+  maxHp: 200
   currSong: 
 --- !u!1 &472700055
 GameObject:
@@ -1033,6 +1033,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 601971947}
+  - component: {fileID: 601971948}
   m_Layer: 0
   m_Name: Hp
   m_TagString: Untagged
@@ -1055,6 +1056,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &601971948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601971946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f118cc2f924c56d4fb08c00f9959a863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HPVisualController
+  _hpVisualPrefab: {fileID: 2111080712692338252, guid: 79d0c77b1d1575447b5cb2166d2b8470, type: 3}
+  delayBetweenBars: 0.05
+  moveDistance: 0.2
+  moveDuration: 0.5
+  fadeDuration: 0.3
 --- !u!1 &628004721
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,6 +3064,7 @@ MonoBehaviour:
   gameOverText: {fileID: 275367103}
   restartButton: {fileID: 628004723}
   exitButton: {fileID: 1800319306}
+  hpBarObject: {fileID: 601971946}
   animationDuration: 0.3
 --- !u!1 &1800319304
 GameObject:

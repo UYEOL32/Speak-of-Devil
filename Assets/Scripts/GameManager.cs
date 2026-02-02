@@ -8,7 +8,7 @@ public class GameManager : SingletonPersistence<GameManager>
     public GameState gameState;
     public event Action OnGameStateChange;
     private int hp;
-    public int maxHp = 100;
+    public int maxHp = 200;
     public string currSong;
 
     protected override void Awake()
@@ -65,15 +65,15 @@ public class GameManager : SingletonPersistence<GameManager>
         switch (judgeType)
         {
             case JudgeType.Perfect:
-                hp += 1;
+                hp += 2;
                 break;
             case JudgeType.Good:
                 return;
             case JudgeType.Bad:
-                hp -= 3;
+                hp -= 6;
                 break;
             case JudgeType.Miss:
-                hp -= 10;
+                hp -= 20;
                 break;
         }
         UIManager.Instance.TakeDamage(hp);

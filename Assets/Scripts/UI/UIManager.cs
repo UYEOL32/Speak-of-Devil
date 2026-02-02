@@ -10,23 +10,15 @@ public class UIManager : Singleton<UIManager>
 {
     [Header("UI Elements")]
     [SerializeField] GameObject beatEffect;
-    [SerializeField] GameObject hpObject;
-    [SerializeField] Slider hpBar;
     [SerializeField] RectTransform gameOverEffect;
     [SerializeField] TextMeshProUGUI gameOverText;
     [SerializeField] Button restartButton;
     [SerializeField] Button exitButton;
+    [SerializeField] GameObject hpBarObject;
 
     [SerializeField] private float animationDuration;
     private Coroutine beatCoroutine;
-
-    void Start()
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            
-        }
-    }
+    
     public void UIReset()
     {
         beatEffect?.SetActive(false);
@@ -34,8 +26,7 @@ public class UIManager : Singleton<UIManager>
         exitButton?.gameObject.SetActive(false);
         gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
         gameOverEffect.anchoredPosition = new Vector2(0, 1080);
-        hpBar.maxValue = GameManager.Instance.maxHp;
-        hpBar.value = hpBar.maxValue;
+        hpBarObject.GetComponent<HPVisualController>().GenerateHpVisual();
     }
 
     public void CallBeatEffect()
@@ -65,12 +56,11 @@ public class UIManager : Singleton<UIManager>
         beatEffect.SetActive(false);
     }
     
-    public void TakeDamage(float currHp)
+    public void TakeDamage(int currHp)
     {
-//         currHp = Mathf.Clamp(currHp, 0, hpBar.maxValue);
+        if(currHp<0) currHp = 0;
         
-        // Slider value를 부드럽게 애니메이션
-        hpBar.DOValue(currHp, animationDuration).SetEase(Ease.OutExpo);
+        hpBarObject.GetComponent<HPVisualController>().UpdateHpBar(currHp);
     }
 
     public void GameOverEffect()
