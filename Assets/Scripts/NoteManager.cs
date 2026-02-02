@@ -37,11 +37,6 @@ public class NoteManager : Singleton<NoteManager>
     private float leadTimeMs;
     private double startDspTime;
     private bool isPlaybackScheduled = false;
-    
-    protected override void Awake()
-    {
-        base.Awake();
-    }
 
     public void Setting()
     {

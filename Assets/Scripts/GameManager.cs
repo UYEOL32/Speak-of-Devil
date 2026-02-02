@@ -8,6 +8,7 @@ public class GameManager : SingletonPersistence<GameManager>
     public GameState gameState;
     public event Action OnGameStateChange;
     private int hp = 100;
+    public string currSong;
 
     protected override void Awake()
     {
@@ -24,6 +25,7 @@ public class GameManager : SingletonPersistence<GameManager>
         switch (gameState)
         {
             case GameState.Playing:
+                if(SceneManager.GetActiveScene().name != "Stage") SceneManager.LoadScene("Stage");
                 hp = 100;
                 NoteManager.Instance.Setting();
                 break;
