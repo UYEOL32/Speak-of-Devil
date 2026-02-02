@@ -30,6 +30,11 @@ public class UIManager : Singleton<UIManager>
         hpBar.value = hpBar.maxValue;
     }
     
+    void Start()
+    {
+        // UIReset();
+    }
+
     public void CallBeatEffect()
     {
         if (beatCoroutine != null)
@@ -59,7 +64,7 @@ public class UIManager : Singleton<UIManager>
     
     public void TakeDamage(float currHp)
     {
-        currHp = Mathf.Clamp(currHp, 0, hpBar.maxValue);
+//         currHp = Mathf.Clamp(currHp, 0, hpBar.maxValue);
         
         // Slider value를 부드럽게 애니메이션
         hpBar.DOValue(currHp, animationDuration).SetEase(Ease.OutExpo);

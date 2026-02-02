@@ -1,139 +1,559 @@
 {
     "songId": "song2",
     "version": 1,
-    "bpm": 100.0,
+    "bpm": 129.5,
     "snapOffsetMs": 200,
     "events": [
         {
-            "timeMs": 10452,
-            "action": 0
+            "timeMs": 6696,
+            "action": 1
         },
         {
-            "timeMs": 10918,
+            "timeMs": 7160,
+            "action": 1
+        },
+        {
+            "timeMs": 7624,
+            "action": 1
+        },
+        {
+            "timeMs": 8088,
+            "action": 1
+        },
+        {
+            "timeMs": 10408,
             "action": 2
         },
         {
-            "timeMs": 11384,
+            "timeMs": 10872,
+            "action": 2
+        },
+        {
+            "timeMs": 11336,
+            "action": 2
+        },
+        {
+            "timeMs": 11800,
+            "action": 2
+        },
+        {
+            "timeMs": 14120,
             "action": 1
         },
         {
-            "timeMs": 11617,
+            "timeMs": 14584,
             "action": 1
         },
         {
-            "timeMs": 11850,
+            "timeMs": 15048,
+            "action": 1
+        },
+        {
+            "timeMs": 15512,
+            "action": 1
+        },
+        {
+            "timeMs": 17832,
             "action": 0
         },
         {
-            "timeMs": 14180,
+            "timeMs": 18296,
             "action": 0
         },
         {
-            "timeMs": 14646,
+            "timeMs": 18760,
+            "action": 0
+        },
+        {
+            "timeMs": 19224,
+            "action": 0
+        },
+        {
+            "timeMs": 21544,
             "action": 3
         },
         {
-            "timeMs": 15112,
-            "action": 2
-        },
-        {
-            "timeMs": 15578,
-            "action": 1
-        },
-        {
-            "timeMs": 17908,
-            "action": 2
-        },
-        {
-            "timeMs": 17908,
-            "action": 2
-        },
-        {
-            "timeMs": 18374,
-            "action": 2
-        },
-        {
-            "timeMs": 18840,
-            "action": 2
-        },
-        {
-            "timeMs": 19073,
-            "action": 2
-        },
-        {
-            "timeMs": 19306,
-            "action": 2
-        },
-        {
-            "timeMs": 21403,
-            "action": 1
-        },
-        {
-            "timeMs": 21636,
-            "action": 1
-        },
-        {
-            "timeMs": 21869,
-            "action": 1
-        },
-        {
-            "timeMs": 22335,
-            "action": 1
-        },
-        {
-            "timeMs": 22568,
-            "action": 1
-        },
-        {
-            "timeMs": 22801,
-            "action": 1
-        },
-        {
-            "timeMs": 25131,
+            "timeMs": 22008,
             "action": 3
         },
         {
-            "timeMs": 25364,
+            "timeMs": 22472,
             "action": 3
         },
         {
-            "timeMs": 25597,
+            "timeMs": 22936,
             "action": 3
         },
         {
-            "timeMs": 26063,
-            "action": 3
+            "timeMs": 25256,
+            "action": 1
         },
         {
-            "timeMs": 26296,
-            "action": 3
+            "timeMs": 25720,
+            "action": 1
         },
         {
-            "timeMs": 26529,
-            "action": 3
+            "timeMs": 26184,
+            "action": 1
         },
         {
-            "timeMs": 28859,
+            "timeMs": 26648,
+            "action": 1
+        },
+        {
+            "timeMs": 28968,
+            "action": 2
+        },
+        {
+            "timeMs": 29432,
+            "action": 2
+        },
+        {
+            "timeMs": 29896,
+            "action": 2
+        },
+        {
+            "timeMs": 30360,
+            "action": 2
+        },
+        {
+            "timeMs": 32680,
             "action": 0
         },
         {
-            "timeMs": 29092,
+            "timeMs": 33144,
             "action": 0
         },
         {
-            "timeMs": 29325,
+            "timeMs": 33608,
             "action": 0
         },
         {
-            "timeMs": 29791,
+            "timeMs": 34072,
             "action": 0
         },
         {
-            "timeMs": 30024,
+            "timeMs": 36392,
+            "action": 3
+        },
+        {
+            "timeMs": 36856,
+            "action": 3
+        },
+        {
+            "timeMs": 37320,
+            "action": 3
+        },
+        {
+            "timeMs": 37784,
+            "action": 3
+        },
+        {
+            "timeMs": 39872,
+            "action": 2
+        },
+        {
+            "timeMs": 40336,
+            "action": 1
+        },
+        {
+            "timeMs": 41032,
+            "action": 2
+        },
+        {
+            "timeMs": 41496,
+            "action": 1
+        },
+        {
+            "timeMs": 43584,
             "action": 0
         },
         {
-            "timeMs": 30257,
+            "timeMs": 44048,
+            "action": 3
+        },
+        {
+            "timeMs": 44512,
+            "action": 0
+        },
+        {
+            "timeMs": 44976,
+            "action": 3
+        },
+        {
+            "timeMs": 47528,
+            "action": 0
+        },
+        {
+            "timeMs": 47528,
+            "action": 3
+        },
+        {
+            "timeMs": 47992,
+            "action": 0
+        },
+        {
+            "timeMs": 47992,
+            "action": 3
+        },
+        {
+            "timeMs": 48224,
+            "action": 0
+        },
+        {
+            "timeMs": 48456,
+            "action": 3
+        },
+        {
+            "timeMs": 48688,
+            "action": 0
+        },
+        {
+            "timeMs": 48920,
+            "action": 3
+        },
+        {
+            "timeMs": 51008,
+            "action": 1
+        },
+        {
+            "timeMs": 51240,
+            "action": 1
+        },
+        {
+            "timeMs": 51472,
+            "action": 1
+        },
+        {
+            "timeMs": 51704,
+            "action": 1
+        },
+        {
+            "timeMs": 51936,
+            "action": 1
+        },
+        {
+            "timeMs": 52168,
+            "action": 1
+        },
+        {
+            "timeMs": 52400,
+            "action": 1
+        },
+        {
+            "timeMs": 52632,
+            "action": 1
+        },
+        {
+            "timeMs": 54720,
+            "action": 2
+        },
+        {
+            "timeMs": 54952,
+            "action": 2
+        },
+        {
+            "timeMs": 55184,
+            "action": 2
+        },
+        {
+            "timeMs": 55416,
+            "action": 2
+        },
+        {
+            "timeMs": 55648,
+            "action": 2
+        },
+        {
+            "timeMs": 55880,
+            "action": 2
+        },
+        {
+            "timeMs": 56112,
+            "action": 2
+        },
+        {
+            "timeMs": 56344,
+            "action": 2
+        },
+        {
+            "timeMs": 58432,
+            "action": 0
+        },
+        {
+            "timeMs": 58664,
+            "action": 3
+        },
+        {
+            "timeMs": 58896,
+            "action": 0
+        },
+        {
+            "timeMs": 59128,
+            "action": 0
+        },
+        {
+            "timeMs": 59360,
+            "action": 3
+        },
+        {
+            "timeMs": 59592,
+            "action": 3
+        },
+        {
+            "timeMs": 59824,
+            "action": 3
+        },
+        {
+            "timeMs": 60056,
+            "action": 3
+        },
+        {
+            "timeMs": 62144,
+            "action": 2
+        },
+        {
+            "timeMs": 62376,
+            "action": 1
+        },
+        {
+            "timeMs": 62608,
+            "action": 2
+        },
+        {
+            "timeMs": 62840,
+            "action": 1
+        },
+        {
+            "timeMs": 63072,
+            "action": 2
+        },
+        {
+            "timeMs": 63304,
+            "action": 1
+        },
+        {
+            "timeMs": 63536,
+            "action": 2
+        },
+        {
+            "timeMs": 63768,
+            "action": 1
+        },
+        {
+            "timeMs": 65856,
+            "action": 0
+        },
+        {
+            "timeMs": 66088,
+            "action": 3
+        },
+        {
+            "timeMs": 66320,
+            "action": 0
+        },
+        {
+            "timeMs": 66552,
+            "action": 3
+        },
+        {
+            "timeMs": 66784,
+            "action": 0
+        },
+        {
+            "timeMs": 67016,
+            "action": 3
+        },
+        {
+            "timeMs": 67248,
+            "action": 0
+        },
+        {
+            "timeMs": 67480,
+            "action": 3
+        },
+        {
+            "timeMs": 69568,
+            "action": 2
+        },
+        {
+            "timeMs": 69800,
+            "action": 1
+        },
+        {
+            "timeMs": 70032,
+            "action": 2
+        },
+        {
+            "timeMs": 70264,
+            "action": 1
+        },
+        {
+            "timeMs": 70496,
+            "action": 0
+        },
+        {
+            "timeMs": 70728,
+            "action": 3
+        },
+        {
+            "timeMs": 70960,
+            "action": 0
+        },
+        {
+            "timeMs": 71192,
+            "action": 3
+        },
+        {
+            "timeMs": 73280,
+            "action": 0
+        },
+        {
+            "timeMs": 73512,
+            "action": 1
+        },
+        {
+            "timeMs": 73744,
+            "action": 3
+        },
+        {
+            "timeMs": 73976,
+            "action": 2
+        },
+        {
+            "timeMs": 74208,
+            "action": 2
+        },
+        {
+            "timeMs": 74440,
+            "action": 3
+        },
+        {
+            "timeMs": 74672,
+            "action": 1
+        },
+        {
+            "timeMs": 74904,
+            "action": 0
+        },
+        {
+            "timeMs": 76992,
+            "action": 0
+        },
+        {
+            "timeMs": 77224,
+            "action": 3
+        },
+        {
+            "timeMs": 77456,
+            "action": 2
+        },
+        {
+            "timeMs": 77688,
+            "action": 1
+        },
+        {
+            "timeMs": 77920,
+            "action": 0
+        },
+        {
+            "timeMs": 78152,
+            "action": 3
+        },
+        {
+            "timeMs": 78384,
+            "action": 2
+        },
+        {
+            "timeMs": 78616,
+            "action": 1
+        },
+        {
+            "timeMs": 80704,
+            "action": 3
+        },
+        {
+            "timeMs": 80936,
+            "action": 3
+        },
+        {
+            "timeMs": 81168,
+            "action": 3
+        },
+        {
+            "timeMs": 81400,
+            "action": 3
+        },
+        {
+            "timeMs": 81632,
+            "action": 0
+        },
+        {
+            "timeMs": 81864,
+            "action": 0
+        },
+        {
+            "timeMs": 82096,
+            "action": 0
+        },
+        {
+            "timeMs": 82328,
+            "action": 0
+        },
+        {
+            "timeMs": 84184,
+            "action": 2
+        },
+        {
+            "timeMs": 84416,
+            "action": 2
+        },
+        {
+            "timeMs": 84880,
+            "action": 2
+        },
+        {
+            "timeMs": 85112,
+            "action": 1
+        },
+        {
+            "timeMs": 85112,
+            "action": 2
+        },
+        {
+            "timeMs": 85344,
+            "action": 1
+        },
+        {
+            "timeMs": 85576,
+            "action": 1
+        },
+        {
+            "timeMs": 85808,
+            "action": 1
+        },
+        {
+            "timeMs": 88360,
+            "action": 3
+        },
+        {
+            "timeMs": 88592,
+            "action": 3
+        },
+        {
+            "timeMs": 88824,
+            "action": 3
+        },
+        {
+            "timeMs": 89056,
+            "action": 0
+        },
+        {
+            "timeMs": 89288,
+            "action": 0
+        },
+        {
+            "timeMs": 89520,
             "action": 0
         }
     ]
