@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.7830189, g: 0.60942507, b: 0.60942507, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -225,8 +225,8 @@ Transform:
   m_GameObject: {fileID: 5531050335231962450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.33, y: -0.11, z: -0}
-  m_LocalScale: {x: 0.79671, y: 0.79671, z: 0.79671}
+  m_LocalPosition: {x: -0.33, y: -0.14, z: -0}
+  m_LocalScale: {x: 0.63474685, y: 0.63474685, z: 0.63474685}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3709187423571390331}
@@ -249,7 +249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &56795461723317074
 Transform:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3709187423571390331}
   - component: {fileID: 7981471996675177463}
-  - component: {fileID: 9077713000776100697}
+  - component: {fileID: 865448386329704278}
   m_Layer: 0
   m_Name: character_dead_head-1
   m_TagString: Untagged
@@ -416,7 +416,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &9077713000776100697
+--- !u!114 &865448386329704278
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -425,8 +425,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8587047917810730735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c94208f2c11baca4db1ace0aa1a6dda0, type: 3}
+  m_Script: {fileID: 11500000, guid: d97fa3811722da74995a6aa688794fef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnitAnimator
+  m_EditorClassIdentifier: Assembly-CSharp::DeadBodyController
   target: {fileID: 0}
-  localOffset: {x: 0, y: -0.37, z: 0}
+  localOffset: {x: 0, y: -0.27, z: 0}

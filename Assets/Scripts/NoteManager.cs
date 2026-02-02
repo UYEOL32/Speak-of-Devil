@@ -314,7 +314,7 @@ public class NoteManager : Singleton<NoteManager>
     public void CheckJudgeType(JudgeType judgeType)
     {
         if (!isTutorial) GameManager.Instance.HpCheck(judgeType);
-        judgeEffect.color = colors[(int)judgeType];
+        // judgeEffect.color = colors[(int)judgeType];
         print(judgeType);
     }
 

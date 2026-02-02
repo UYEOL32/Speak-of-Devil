@@ -39,7 +39,7 @@ public class GameManager : SingletonPersistence<GameManager>
 
 
                 NoteManager.Instance.Setting();
-                // UIManager.Instance.UIReset();
+                UIManager.Instance.UIReset();
                 break;
             case GameState.Title:
                 SceneManager.LoadScene("Title");
@@ -55,6 +55,7 @@ public class GameManager : SingletonPersistence<GameManager>
 
     public void HpCheck(JudgeType judgeType)
     {
+        
         switch (judgeType)
         {
             case JudgeType.Perfect:
