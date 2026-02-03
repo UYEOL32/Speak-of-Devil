@@ -1943,6 +1943,7 @@ MonoBehaviour:
   breakClip: {fileID: 8300000, guid: 73f78d01c929b401985f148c598452e1, type: 3}
   downClip: {fileID: 8300000, guid: 0a02d383376474b6c91a6a1fe21019dd, type: 3}
   outClip: {fileID: 8300000, guid: e890f9224024d4b58b5e72c8f4fe5eb0, type: 3}
+  breakout: {fileID: 1710633912}
   judgeEffect: {fileID: 0}
   colors: []
   dailyVolume: {fileID: 789442938}
