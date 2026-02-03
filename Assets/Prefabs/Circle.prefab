@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5450824657919199330}
   - component: {fileID: 2417148118100272060}
   - component: {fileID: 1849956370651972399}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5852971826481365921}
   - component: {fileID: 426483416680219456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: character_dead_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2155358537458987477}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 56795461723317074}
   - component: {fileID: 7760638493865527113}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 3709187423571390331}
   - component: {fileID: 7981471996675177463}
   - component: {fileID: 865448386329704278}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: character_dead_head-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
