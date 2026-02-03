@@ -301,7 +301,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Hellfire On Sahara
+          m_StringArgument: Symbiotic Devolution
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &52211673
@@ -2271,6 +2271,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2049394445
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4346678326913763195, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_Name
+      value: Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.49189
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -6.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509125413916382613, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c1e16cc91a1f546ad84239510050729b, type: 3}
 --- !u!1 &2133763741
 GameObject:
   m_ObjectHideFlags: 0
@@ -2366,3 +2423,4 @@ SceneRoots:
   - {fileID: 1511953830}
   - {fileID: 937921695}
   - {fileID: 1573714626}
+  - {fileID: 2049394445}

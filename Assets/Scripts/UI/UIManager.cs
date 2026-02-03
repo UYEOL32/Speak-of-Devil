@@ -39,6 +39,7 @@ public class UIManager : Singleton<UIManager>
         judgeTextImage.sprite = transparentSprite;
         speechBubble?.gameObject.SetActive(true);
         gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
+        gameClearText.color = new Color(gameClearText.color.r, gameClearText.color.g, gameClearText.color.b, 0f);
         gameOverEffect.anchoredPosition = new Vector2(0, 1080);
         hpBarObject.GetComponent<HPVisualController>().GenerateHpVisual();
         
