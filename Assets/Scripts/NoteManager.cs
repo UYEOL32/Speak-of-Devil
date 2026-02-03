@@ -317,10 +317,20 @@ public class NoteManager : Singleton<NoteManager>
             .OnComplete(() => volume.enabled = false);
     }
 
-    public void BreakDownEnd()
+    public RectTransform breakout;
+    
+    public void BreakDownEnd() 
     {
         sfxAudioSource.PlayOneShot(outClip);
-        breakDownMode = false;
+        breakDownMode = false;        
+
+        breakout.DOKill(); // 이전 트윈 제거
+        breakout.anchoredPosition = new Vector2(1920, 0);
+
+        DOTween.Sequence()
+            .Append(breakout.DOAnchorPosX(0, 0.2f, false).SetEase(Ease.OutBack))
+            .Append(breakout.DOAnchorPosX(-1920, 0.2f, false).SetEase(Ease.InQuart))
+            .SetUpdate(true); // 필요 없으면 빼도 됨
     }
 
     private void ResetBreakDownMode()
@@ -420,7 +430,8 @@ public class NoteManager : Singleton<NoteManager>
     public float chrAbreIntesity;
 
     Tween chrBeatTween;
-
+    
+    
     public void ChrBeat()
     {
         chrBeatTween?.Kill();   // ← 이전 것 종료
