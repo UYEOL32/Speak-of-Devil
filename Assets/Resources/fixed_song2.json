@@ -2,7 +2,7 @@
     "songId": "abcd",
     "version": 1,
     "bpm": 120.0,
-    "snapOffsetMs": 0,
+    "snapOffsetMs": 75,
     "events": [
         {
             "timeMs": 10825,
@@ -530,35 +530,35 @@
         },
         {
             "timeMs": 86825,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 87075,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 87325,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 87575,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 87825,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 88075,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 88325,
-            "action": 1
+            "action": 0
         },
         {
             "timeMs": 88575,
-            "action": 1
+            "action": 0
         },
         {
             "timeMs": 94325,
@@ -674,27 +674,27 @@
         },
         {
             "timeMs": 118825,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 119075,
-            "action": 1
+            "action": 3
         },
         {
             "timeMs": 119325,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 119575,
-            "action": 1
+            "action": 3
         },
         {
             "timeMs": 119825,
-            "action": 2
+            "action": 0
         },
         {
             "timeMs": 120075,
-            "action": 1
+            "action": 3
         },
         {
             "timeMs": 120325,
@@ -722,19 +722,19 @@
         },
         {
             "timeMs": 126325,
-            "action": 2
+            "action": 1
         },
         {
             "timeMs": 127325,
-            "action": 2
+            "action": 1
         },
         {
             "timeMs": 128325,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 136325,
-            "action": 2
+            "action": 1
         },
         {
             "timeMs": 140671,
@@ -838,31 +838,31 @@
         },
         {
             "timeMs": 149060,
-            "action": 0
+            "action": 1
         },
         {
             "timeMs": 149310,
-            "action": 0
+            "action": 1
         },
         {
             "timeMs": 149560,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 149810,
-            "action": 3
+            "action": 0
         },
         {
             "timeMs": 150060,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 150310,
-            "action": 0
+            "action": 1
         },
         {
             "timeMs": 150560,
-            "action": 0
+            "action": 1
         },
         {
             "timeMs": 150810,
@@ -870,7 +870,7 @@
         },
         {
             "timeMs": 151060,
-            "action": 3
+            "action": 0
         },
         {
             "timeMs": 151325,
@@ -882,19 +882,19 @@
         },
         {
             "timeMs": 151825,
-            "action": 0
+            "action": 1
         },
         {
             "timeMs": 152075,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 152325,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 152575,
-            "action": 3
+            "action": 1
         },
         {
             "timeMs": 160325,

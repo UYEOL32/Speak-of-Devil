@@ -8,6 +8,7 @@ public class DeadBodyController : MonoBehaviour
 
     private Sequence currentSequence;
     private bool isSubscribed = false;
+    private NoteManager noteManager;
 
     void Awake()
     {
@@ -15,6 +16,7 @@ public class DeadBodyController : MonoBehaviour
         {
             target = transform;
         }
+        noteManager = FindFirstObjectByType<NoteManager>();
     }
 
     void OnEnable()
@@ -30,11 +32,11 @@ public class DeadBodyController : MonoBehaviour
 
     public void PlayAnimation()
     {
-        if (NoteManager.Instance == null) return;
+        if (noteManager == null) return;
 
         currentSequence?.Kill();
 
-        float quarterTime = (float)NoteManager.Instance.intervalTime / 4f;
+        float quarterTime = (float)noteManager.intervalTime / 4f;
         float halfTime = quarterTime * 2f;
         Vector3 startPos = target.localPosition;
 
@@ -49,17 +51,17 @@ public class DeadBodyController : MonoBehaviour
     public void SubscribeToBeat()
     {
         if (isSubscribed) return;
-        if (NoteManager.Instance == null) return;
-        NoteManager.Instance.OnEveryBeat += PlayAnimation;
+        if (noteManager == null) return;
+        noteManager.OnEveryBeat += PlayAnimation;
         isSubscribed = true;
     }
 
     public void UnsubscribeFromBeat()
     {
         if (!isSubscribed) return;
-        if (NoteManager.Instance != null)
+        if (noteManager != null)
         {
-            NoteManager.Instance.OnEveryBeat -= PlayAnimation;
+            noteManager.OnEveryBeat -= PlayAnimation;
         }
         isSubscribed = false;
     }

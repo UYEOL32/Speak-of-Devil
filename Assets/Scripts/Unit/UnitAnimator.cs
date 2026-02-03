@@ -16,6 +16,7 @@ public class UnitAnimator : MonoBehaviour
     private int beatsUntilIdle = -1;
     private List<GameObject[]> animationPool = new List<GameObject[]>();
     private Sequence currentSequence;
+    private NoteManager noteManager;
 
     void Awake()
     {
@@ -24,6 +25,8 @@ public class UnitAnimator : MonoBehaviour
             Debug.LogError("UnitAnimator: No animations assigned!");
             return;
         }
+
+        noteManager = FindFirstObjectByType<NoteManager>();
         
         // 미리 모든 애니메이션 생성
         for (int i = 0; i < animations.Count; i++)
@@ -40,7 +43,10 @@ public class UnitAnimator : MonoBehaviour
             animationPool.Add(new GameObject[] { head, body });
         }
         
-        NoteManager.Instance.OnEveryBeat += HandleBeat;
+        if (noteManager != null)
+        {
+            noteManager.OnEveryBeat += HandleBeat;
+        }
         if (debugLogs)
         {
             Debug.Log($"UnitAnimator[{name}] subscribed. animations={animations.Count}");
@@ -49,8 +55,10 @@ public class UnitAnimator : MonoBehaviour
 
     void OnDestroy()
     {
-        if (NoteManager.Instance != null)
-            NoteManager.Instance.OnEveryBeat -= HandleBeat;
+        if (noteManager != null)
+        {
+            noteManager.OnEveryBeat -= HandleBeat;
+        }
         if (debugLogs)
         {
             Debug.Log($"UnitAnimator[{name}] unsubscribed.");
@@ -106,7 +114,8 @@ public class UnitAnimator : MonoBehaviour
         
         // 애니메이션 실행
         Vector3 currPos = transform.position;
-        float quarterTime = (float)NoteManager.Instance.intervalTime / 4f;
+        if (noteManager == null) return;
+        float quarterTime = (float)noteManager.intervalTime / 4f;
         float halfTime = quarterTime * 2f;
         
         Transform headTransform = animationPool[currentAnimationIndex][0].transform;

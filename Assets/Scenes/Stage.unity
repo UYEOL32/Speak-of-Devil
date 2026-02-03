@@ -1903,14 +1903,14 @@ MonoBehaviour:
   songId: Knocking On Hell's Door
   songEntries:
   - songId: Hellfire On Sahara
-    chartResourceName: song2
-    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+    chartResourceName: song1
+    audioClip: {fileID: 8300000, guid: a21e691436cf54c7e971454a740089ce, type: 3}
   - songId: Knocking On Hell's Door
     chartResourceName: song2
-    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+    audioClip: {fileID: 8300000, guid: a21e691436cf54c7e971454a740089ce, type: 3}
   - songId: Rip Out Devil's Heart
-    chartResourceName: song2
-    audioClip: {fileID: 8300000, guid: c3f2bc45eb54f4dcbba4e171ba038a7d, type: 3}
+    chartResourceName: song3
+    audioClip: {fileID: 8300000, guid: e60ecb3b713e44fce9b910708e1424ad, type: 3}
   bossUnitAnimator: {fileID: 535513534}
   debugBossAnim: 0
   bossIdleLockBeats: 2
@@ -2351,7 +2351,7 @@ Transform:
   m_GameObject: {fileID: 881875850}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: -8, z: 0}
+  m_LocalPosition: {x: 0.5, y: -8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
