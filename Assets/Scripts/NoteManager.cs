@@ -80,6 +80,7 @@ public class NoteManager : Singleton<NoteManager>
     private int nextSpecialEventIndex = 0;
     private float leadTimeMs;
     private float fourBeatMs;
+    private int debugFourBeatOffsetMsDefault;
     private int lastBeatIndex = -1;
     private int lastEveryFourBeatIndex = -1;
     private int lastTutorialBeatIndex = -1;
@@ -172,6 +173,7 @@ public class NoteManager : Singleton<NoteManager>
         noteSpeed = bpm / 60d;
         leadTimeMs = leadBeats * (60000f / bpm);
         fourBeatMs = 4f * (60000f / bpm);
+        debugFourBeatOffsetMsDefault = debugFourBeatOffsetMs;
         currentTime = 0d;
         nextEventIndex = 0;
         nextFourBeatIndex = 0;
@@ -634,6 +636,9 @@ public class NoteManager : Singleton<NoteManager>
             {
                 audioSource.clip = entry.audioClip;
             }
+
+              debugFourBeatOffsetMs = entry.debugFourBeatOffsetMsOverride;
+            
 
             chart = null;
             return;
@@ -1171,6 +1176,7 @@ public class SongEntry
     public string songId;
     public string chartResourceName;
     public AudioClip audioClip;
+    public int debugFourBeatOffsetMsOverride;
 }
 
 public enum JudgeType

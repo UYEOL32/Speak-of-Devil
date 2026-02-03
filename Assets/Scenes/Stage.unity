@@ -1901,17 +1901,20 @@ MonoBehaviour:
   debugFourBeatOffsetMs: 300
   debugEveryFourBeats: 1
   useSongId: 1
-  songId: Knocking On Hell's Door
+  songId: Symbiotic Devolution
   songEntries:
-  - songId: Hellfire On Sahara
+  - songId: Symbiotic Devolution
     chartResourceName: song1
-    audioClip: {fileID: 8300000, guid: a21e691436cf54c7e971454a740089ce, type: 3}
+    audioClip: {fileID: 8300000, guid: 8767408ff9a0f417792b1783fd74143d, type: 3}
+    debugFourBeatOffsetMsOverride: 0
   - songId: Knocking On Hell's Door
     chartResourceName: song2
     audioClip: {fileID: 8300000, guid: a21e691436cf54c7e971454a740089ce, type: 3}
+    debugFourBeatOffsetMsOverride: 300
   - songId: Rip Out Devil's Heart
     chartResourceName: song3
     audioClip: {fileID: 8300000, guid: e60ecb3b713e44fce9b910708e1424ad, type: 3}
+    debugFourBeatOffsetMsOverride: 270
   bossUnitAnimator: {fileID: 535513534}
   debugBossAnim: 0
   bossIdleLockBeats: 2
@@ -3581,6 +3584,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 89bb4061-0c76-4918-bcd8-da4306a61506
     m_ActionName: 'Player/TutorialProceed[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e954252c-7993-4ad8-aa1a-38a1fb44b68e
+    m_ActionName: 'Player/Click[/Mouse/leftButton,/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
