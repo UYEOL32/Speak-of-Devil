@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class Note : MonoBehaviour
 {
@@ -16,10 +17,14 @@ public class Note : MonoBehaviour
     private Coroutine moveRoutine;
     [SerializeField] private GameObject missEffectPrefab;
     [SerializeField] private float hitMoveDuration = 0.1f;
+    [SerializeField] private Sprite[] headSprites;
+   
+    private SpriteRenderer headSR;
 
     public void InitMove(List<Vector3> path, double interval, int max, float offsetRate)
     {
-
+        headSR.sprite = headSprites[Random.Range(0, headSprites.Length)];
+        
         notePositions = new List<Vector3>(path.Count);
         
         for(int i = 0; i<path.Count; i++)
