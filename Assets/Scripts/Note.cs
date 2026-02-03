@@ -19,7 +19,7 @@ public class Note : MonoBehaviour
     [SerializeField] private float hitMoveDuration = 0.1f;
     [SerializeField] private Sprite[] headSprites;
    
-    private SpriteRenderer headSR;
+    [SerializeField] private SpriteRenderer headSR;
 
     public void InitMove(List<Vector3> path, double interval, int max, float offsetRate)
     {
