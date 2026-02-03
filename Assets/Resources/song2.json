@@ -2,7 +2,7 @@
     "songId": "abcd",
     "version": 1,
     "bpm": 120.0,
-    "snapOffsetMs": 75,
+    "snapOffsetMs": 0,
     "events": [
         {
             "timeMs": 10825,

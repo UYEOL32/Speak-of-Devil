@@ -728,7 +728,7 @@ MonoBehaviour:
     headPrefab: {fileID: 8010614380076949990, guid: a5666c605f7fa6e4eb3d45580f4ef882, type: 3}
     bodyPrefab: {fileID: 1991569851124365589, guid: b12ce0e0a84ef744983850d76c9fe9b0, type: 3}
   distance: {x: 0, y: -0.15, z: 0}
-  useExternalIndex: 0
+  useExternalIndex: 1
   debugLogs: 0
   idleAfterBeats: 2
 --- !u!1 &408593203
