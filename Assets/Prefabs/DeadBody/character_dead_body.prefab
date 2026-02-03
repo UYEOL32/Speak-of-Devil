@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7197638809936420628}
   - component: {fileID: 8251129764531926066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: character_dead_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

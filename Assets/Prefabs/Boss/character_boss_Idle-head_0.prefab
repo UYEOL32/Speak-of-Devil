@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8491591176962671652}
   - component: {fileID: 4015724094751362064}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: character_boss_Idle-head_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

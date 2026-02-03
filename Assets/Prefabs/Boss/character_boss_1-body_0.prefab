@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5387780615339509577}
   - component: {fileID: 5505303930855108469}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: character_boss_1-body_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2706095968277797707}
   - component: {fileID: 7038690598718291902}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: character_twin_3-body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
