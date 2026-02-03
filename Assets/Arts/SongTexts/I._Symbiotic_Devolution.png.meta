@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 128dcdaf1fc2d6447aaa4b53a484a738
+guid: baef6065097e7a14c8c43593c7701dd8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5659126734533709096
-    second: I._Hellfire_On_Sahara-1_0
+      213: 1905657366805919299
+    second: I._Symbiotic_Devolution_0
   - first:
-      213: 5010846685728705309
-    second: I._Hellfire_On_Sahara-1_1
+      213: 1076736467673720836
+    second: I._Symbiotic_Devolution_1
   - first:
-      213: 7270933050301191424
-    second: I._Hellfire_On_Sahara-1_2
+      213: -960088031855564205
+    second: I._Symbiotic_Devolution_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: I._Hellfire_On_Sahara-1_0
+      name: I._Symbiotic_Devolution_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 66
-        height: 113
+        width: 53
+        height: 101
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,41 +121,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 82d4cce18c1498e40800000000000000
-      internalID: 5659126734533709096
+      spriteID: 346b21c4741427a10800000000000000
+      internalID: 1905657366805919299
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: I._Hellfire_On_Sahara-1_1
+      name: I._Symbiotic_Devolution_1
       rect:
         serializedVersion: 2
         x: 160
         y: 0
-        width: 253
-        height: 118
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d1b8dc6138a1a8540800000000000000
-      internalID: 5010846685728705309
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: I._Hellfire_On_Sahara-1_2
-      rect:
-        serializedVersion: 2
-        x: 411
-        y: 13
-        width: 332
+        width: 304
         height: 105
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -165,8 +143,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 00599d0161b87e460800000000000000
-      internalID: 7270933050301191424
+      spriteID: 408a660dc1651fe00800000000000000
+      internalID: 1076736467673720836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: I._Symbiotic_Devolution_2
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 11
+        width: 335
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35a252495051da2f0800000000000000
+      internalID: -960088031855564205
       vertices: []
       indices: 
       edges: []
@@ -185,9 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      I._Hellfire_On_Sahara-1_0: 5659126734533709096
-      I._Hellfire_On_Sahara-1_1: 5010846685728705309
-      I._Hellfire_On_Sahara-1_2: 7270933050301191424
+      I._Symbiotic_Devolution_0: 1905657366805919299
+      I._Symbiotic_Devolution_1: 1076736467673720836
+      I._Symbiotic_Devolution_2: -960088031855564205
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

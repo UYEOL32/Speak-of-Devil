@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 27cbd6c4a6a0338429238786b6ca811a
+guid: 5bed679eb92aa1f44ae3b0775adfd925
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1999731861395808235
-    second: I._Hellfire_On_Sahara_0
+      213: -8194244940566763711
+    second: MainMenu_background7_0
   - first:
-      213: 3346703915596828921
-    second: I._Hellfire_On_Sahara_1
+      213: 7412210188180009582
+    second: MainMenu_background7_1
   - first:
-      213: 4327199623745353093
-    second: I._Hellfire_On_Sahara_2
-  - first:
-      213: 524061610958122862
-    second: I._Hellfire_On_Sahara_3
+      213: 4376864001290786832
+    second: MainMenu_background7_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,7 +81,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -109,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: I._Hellfire_On_Sahara_0
+      name: MainMenu_background7_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 53
-        height: 100
+        x: 853
+        y: 96
+        width: 115
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +121,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bef178c688970cb10800000000000000
-      internalID: 1999731861395808235
+      spriteID: 147e9fa34a1384e80800000000000000
+      internalID: -8194244940566763711
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: I._Hellfire_On_Sahara_1
+      name: MainMenu_background7_1
       rect:
         serializedVersion: 2
-        x: 160
-        y: 0
-        width: 239
-        height: 104
+        x: 978
+        y: 96
+        width: 51
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9f0de89ca71e17e20800000000000000
-      internalID: 3346703915596828921
+      spriteID: e62300305e57dd660800000000000000
+      internalID: 7412210188180009582
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: I._Hellfire_On_Sahara_2
+      name: MainMenu_background7_2
       rect:
         serializedVersion: 2
-        x: 410
-        y: 12
-        width: 93
-        height: 89
+        x: 1040
+        y: 96
+        width: 114
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,30 +165,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 585bb8d912d4d0c30800000000000000
-      internalID: 4327199623745353093
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: I._Hellfire_On_Sahara_3
-      rect:
-        serializedVersion: 2
-        x: 508
-        y: 13
-        width: 221
-        height: 91
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e6fe3913247d54700800000000000000
-      internalID: 524061610958122862
+      spriteID: 018d12b9e9ebdbc30800000000000000
+      internalID: 4376864001290786832
       vertices: []
       indices: 
       edges: []
@@ -210,10 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      I._Hellfire_On_Sahara_0: 1999731861395808235
-      I._Hellfire_On_Sahara_1: 3346703915596828921
-      I._Hellfire_On_Sahara_2: 4327199623745353093
-      I._Hellfire_On_Sahara_3: 524061610958122862
+      MainMenu_background7_0: -8194244940566763711
+      MainMenu_background7_1: 7412210188180009582
+      MainMenu_background7_2: 4376864001290786832
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

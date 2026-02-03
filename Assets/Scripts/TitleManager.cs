@@ -1,31 +1,41 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class TitleManager : MonoBehaviour
 {
     [SerializeField] List<GameObject> titleObjects = new List<GameObject>();
     [SerializeField] List<GameObject> stageSelectObjects = new List<GameObject>();
+    [SerializeField] private GameObject pressToStartText;
+    [SerializeField] Camera mainCamera;
     public UIState uiState;
-
+    private UniversalAdditionalCameraData cameraData;
     private void Awake()
     {
         UpdateUIState(UIState.Title);
     }
-
+    
     private void UpdateUIState(UIState newUIState)
     {
         uiState = newUIState;
-
+        cameraData = mainCamera.GetComponent<Camera>().GetUniversalAdditionalCameraData();
         switch (uiState)
         {
             case UIState.Title:
+                cameraData.renderPostProcessing = false;
                 ControlActive(true,titleObjects);
+                pressToStartText.gameObject.SetActive(true);
                 ControlActive(false,stageSelectObjects);
+                PressToStartAnimation();
                 break;
             case UIState.LevelSelect:
+                cameraData.renderPostProcessing = true;
                 ControlActive(false,titleObjects);
+                pressToStartText.gameObject.SetActive(false);
                 ControlActive(true,stageSelectObjects);
                 LevelSelectIntro();
                 break;
@@ -37,7 +47,11 @@ public class TitleManager : MonoBehaviour
         foreach (GameObject obj in objects) obj.SetActive(active);
     }
 
-   
+    void PressToStartAnimation()
+    {
+        SpriteRenderer spriteRenderer = pressToStartText.GetComponent<SpriteRenderer>();
+        spriteRenderer.DOFade(0, 2f).SetEase(Ease.InQuart).SetDelay(2f).SetLoops(-1, LoopType.Yoyo);
+    }
     public void OnClickStart()
     {
         UpdateUIState(UIState.LevelSelect);
